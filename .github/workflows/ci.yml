@@ -45,7 +45,18 @@ jobs:
       - name: Secret Scan Verification
         run: |
           echo "Scanning repository for legacy universal credentials or leaked tokens..."
-          if grep -rn "PanaceaSecure2026" --exclude-dir=node_modules --exclude-dir=.git --exclude="*.test.ts" .; then
+          if grep -rnE "Panacea[S]ecure2026|Panacea[S]uperAdmin|Managing[D]irector#|Operations[D]irector#|Compliance[O]fficer#|Lead[L]egalEnforcement#|Chief[I]nvestigator#|JBSWY3[D]PEHPK3PXP" \
+            --exclude-dir=node_modules \
+            --exclude-dir=.git \
+            --exclude-dir=.github \
+            --exclude-dir=.turbo \
+            --exclude-dir=.next \
+            --exclude-dir=dist \
+            --exclude-dir=build \
+            --exclude="*.test.ts" \
+            --exclude="*.md" \
+            --exclude="*.log" \
+            .; then
             echo "FATAL: Detected universal credential residue!"
             exit 1
           fi
