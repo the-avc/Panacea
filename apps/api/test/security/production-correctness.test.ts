@@ -24,15 +24,16 @@ import { rateLimiter } from '../../src/common/services/rate-limiter.service';
 import { validateProductionStartup } from '../../src/common/config/startup-validator';
 
 function extractSession(res: request.Response) {
-  const cookies: string[] = res.get('Set-Cookie') || [];
+  const rawCookies = res.get('Set-Cookie');
+  const cookies: string[] = Array.isArray(rawCookies) ? rawCookies : rawCookies ? [rawCookies] : [];
   let sessionCookie = '';
   let csrfCookie = '';
   let csrfToken = '';
 
   cookies.forEach((c) => {
-    if (c.startsWith('panacea_session=')) sessionCookie = c.split(';')[0];
+    if (c.startsWith('panacea_session=')) sessionCookie = c.split(';')[0] ?? '';
     if (c.startsWith('panacea_csrf=')) {
-      csrfCookie = c.split(';')[0];
+      csrfCookie = c.split(';')[0] ?? '';
       csrfToken = csrfCookie.replace('panacea_csrf=', '');
     }
   });

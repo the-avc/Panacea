@@ -7,17 +7,18 @@ import { TEST_CREDENTIALS } from '../../src/database/seed-data';
 import { verifyAuditLogIntegrity } from '../../src/common/middleware/audit';
 
 function extractSessionContext(res: request.Response) {
-  const cookies: string[] = res.get('Set-Cookie') || [];
+  const rawCookies = res.get('Set-Cookie');
+  const cookies: string[] = Array.isArray(rawCookies) ? rawCookies : rawCookies ? [rawCookies] : [];
   let sessionCookie = '';
   let csrfCookie = '';
   let csrfToken = '';
 
   cookies.forEach((c) => {
     if (c.startsWith('panacea_session=')) {
-      sessionCookie = c.split(';')[0];
+      sessionCookie = c.split(';')[0] ?? '';
     }
     if (c.startsWith('panacea_csrf=')) {
-      csrfCookie = c.split(';')[0];
+      csrfCookie = c.split(';')[0] ?? '';
       csrfToken = csrfCookie.replace('panacea_csrf=', '');
     }
   });
