@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 
-export default function LoginPage() {
+function LoginFormContent() {
   const searchParams = useSearchParams();
   const initialTab = searchParams.get('portal') === 'client' ? 'client' : 'staff';
   const [activeTab, setActiveTab] = useState<'staff' | 'client'>(initialTab);
@@ -337,5 +337,19 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-[#071324] text-white">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-gold-400 border-t-transparent" />
+        </div>
+      }
+    >
+      <LoginFormContent />
+    </React.Suspense>
   );
 }
