@@ -117,8 +117,8 @@ describe('PANACEA FINAL P0 DATABASE & RUNTIME CONSISTENCY SUITE', () => {
       expect(session.id).toBeDefined();
       expect(session.session_verifier_hash).toBe(verifierHash);
       // Raw token must NEVER be stored
-      expect((session as any).rawVerifier).toBeUndefined();
-      expect((session as any).token).toBeUndefined();
+      expect(session).not.toHaveProperty('rawVerifier');
+      expect(session).not.toHaveProperty('token');
 
       // Lookup by verifier hash works
       const retrieved = await db.getSessionByVerifierHash(verifierHash);
@@ -394,7 +394,7 @@ describe('PANACEA FINAL P0 DATABASE & RUNTIME CONSISTENCY SUITE', () => {
   describe('6. Zero Hardcoded Credentials & Production Isolation', () => {
     it('proves SEED fixtures are structurally empty in production mode', () => {
       process.env.NODE_ENV = 'production';
-      let prodSeeds: any;
+      let prodSeeds!: typeof import('../../src/database/seed-data');
       jest.isolateModules(() => {
         prodSeeds = require('../../src/database/seed-data');
       });
