@@ -14,9 +14,18 @@ export interface UserContextType {
 
 interface AuthContextType {
   user: UserContextType | null;
-  token: string | null;
   loading: boolean;
-  login: (email: string, password: string, mfaCode?: string) => Promise<{ success: boolean; mfaRequired?: boolean; error?: string }>;
+  login: (
+    email: string,
+    password: string,
+    mfaCode?: string,
+  ) => Promise<{
+    success: boolean;
+    mfaRequired?: boolean;
+    mfaEnrollmentRequired?: boolean;
+    enrollmentToken?: string;
+    error?: string;
+  }>;
   logout: () => Promise<void>;
   isAdmin: boolean;
   isDirector: boolean;
@@ -28,24 +37,33 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserContextType | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  // Hydrate session strictly from server-side validation (ZERO localStorage secrets)
   useEffect(() => {
-    // Hydrate session from localStorage or verify with server
-    const savedToken = localStorage.getItem('panacea_token');
-    const savedUser = localStorage.getItem('panacea_user');
+    let mounted = true;
 
-    if (savedToken && savedUser) {
-      setToken(savedToken);
+    async function checkAuthSession() {
       try {
-        setUser(JSON.parse(savedUser));
+        const res = await apiFetch<any>('/auth/me');
+        if (mounted && res.data?.user) {
+          setUser(res.data.user);
+        } else if (mounted) {
+          setUser(null);
+        }
       } catch {
-        // Fallback
+        if (mounted) setUser(null);
+      } finally {
+        if (mounted) setLoading(false);
       }
     }
-    setLoading(false);
+
+    checkAuthSession();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const login = async (email: string, password: string, mfaCode?: string) => {
@@ -58,31 +76,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { success: false, error: res.error.message };
     }
 
+    if (res.data?.mfaEnrollmentRequired) {
+      return {
+        success: false,
+        mfaEnrollmentRequired: true,
+        enrollmentToken: res.data.enrollmentToken,
+        error: res.data.message,
+      };
+    }
+
     if (res.data?.mfaRequired) {
       return { success: false, mfaRequired: true };
     }
 
-    if (res.data?.user && res.data?.session) {
+    if (res.data?.user) {
       setUser(res.data.user);
-      setToken(res.data.session.token);
-      localStorage.setItem('panacea_token', res.data.session.token);
-      localStorage.setItem('panacea_user', JSON.stringify(res.data.user));
       return { success: true };
     }
 
-    return { success: false, error: 'Unexpected login response' };
+    return { success: false, error: 'Unexpected login response from security server.' };
   };
 
   const logout = async () => {
     try {
       await apiFetch('/auth/logout', { method: 'POST' });
     } catch {
-      // ignore
+      // Ignore network errors on logout to allow clean local redirection
     }
     setUser(null);
-    setToken(null);
-    localStorage.removeItem('panacea_token');
-    localStorage.removeItem('panacea_user');
     router.push('/login');
   };
 
@@ -109,7 +130,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <AuthContext.Provider
       value={{
         user,
-        token,
         loading,
         login,
         logout,

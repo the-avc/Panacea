@@ -195,21 +195,19 @@ Once running, access the services at:
 
 ---
 
-## 🔑 Demonstration Personas & RBAC Tiers
-
-All pre-configured testing accounts use the universal demonstration password: **`PanaceaSecure2026!#`**
-
-| Role / Title | RBAC Tier | Access Scope | Login Method |
+## 🔑 Access Control & Environment Isolation
+ 
+In development and testing environments, test accounts are configured with isolated individual credentials in `seed-data.ts`. Production deployments contain **zero default accounts and zero universal passwords**, requiring initial administrative bootstrap via secure enrollment.
+ 
+| Role / Title | RBAC Tier | Access Scope | Login Scope |
 | :--- | :--- | :--- | :--- |
-| **Managing Director** | `platform_super_admin` | Full cross-bank portfolio oversight, system governance, and legal mandate authority | Click persona button on `/admin/login` |
-| **Director — Operations** | `operations_admin` | Field operations oversight, officer assignments, and statutory enforcement management | Click persona button on `/admin/login` |
-| **Systems Administrator** | `platform_super_admin` | Tenant configuration, security audit logs, and account lifecycle management | Click persona button on `/admin/login` |
-| **Legal Recovery Lead** | `panacea_legal_recovery_user` | Section 13(2) notices, Section 14 DM court petitions, and affidavits | Click persona button on `/login` (Staff tab) |
-| **Chief Investigator** | `panacea_investigation_user` | Asset verification, title tracing, and borrower fraud investigation | Click persona button on `/login` (Staff tab) |
-| **Bank Nodal Officer (Bank 1)**| `institutional_client_admin` | Strictly scoped to Bank 1 recovery dockets; BOLA isolated | Click persona button on `/login` (Client tab) |
-| **Bank Recovery Desk (Bank 2)** | `institutional_client_user` | Strictly scoped to Bank 2 recovery dockets; BOLA isolated | Click persona button on `/login` (Client tab) |
-
-*(Note: On both the unified login page and the dedicated Admin Gateway, one-click persona switcher buttons automatically autofill credentials for instant testing).*
+| **Managing Director** | `platform_super_admin` | Full cross-bank portfolio oversight, governance, and mandate authority | `/admin/login` |
+| **Director — Operations** | `operations_admin` | Field operations oversight, officer assignments, and statutory enforcement | `/admin/login` |
+| **Systems Administrator** | `platform_super_admin` | Tenant configuration, security audit logs, and account lifecycle management | `/admin/login` |
+| **Legal Recovery Lead** | `panacea_legal_recovery_user` | Section 13(2) notices, Section 14 DM court petitions, and affidavits | `/login` (Staff) |
+| **Chief Investigator** | `panacea_investigation_user` | Asset verification, title tracing, and borrower fraud investigation | `/login` (Staff) |
+| **Bank Nodal Officer (Bank 1)**| `institutional_client_admin` | Strictly scoped to Bank 1 recovery dockets; BOLA isolated | `/login` (Client) |
+| **Bank Recovery Desk (Bank 2)** | `institutional_client_user` | Strictly scoped to Bank 2 recovery dockets; BOLA isolated | `/login` (Client) |
 
 ---
 

@@ -8,7 +8,7 @@ on:
 
 jobs:
   validate:
-    name: Typecheck, Build & Security Test
+    name: Typecheck, Build, Secret Audit & Security Suite
     runs-on: ubuntu-latest
 
     steps:
@@ -42,6 +42,15 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Secret Scan Verification
+        run: |
+          echo "Scanning repository for legacy universal credentials or leaked tokens..."
+          if grep -rn "PanaceaSecure2026" --exclude-dir=node_modules --exclude-dir=.git --exclude="*.test.ts" .; then
+            echo "FATAL: Detected universal credential residue!"
+            exit 1
+          fi
+          echo "Secret scan passed: zero universal credentials detected."
+
       - name: Monorepo Typecheck
         run: |
           pnpm --filter @panacea/types build
@@ -52,7 +61,7 @@ jobs:
           pnpm --filter @panacea/web typecheck
           pnpm --filter @panacea/portal typecheck
 
-      - name: Automated Security Test Suite (100% Pass Required)
+      - name: Security Regression Suite
         run: pnpm --filter @panacea/api test
 
       - name: Production Bundle Build Verification

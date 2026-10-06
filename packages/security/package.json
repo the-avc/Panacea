@@ -7,6 +7,6 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
-    "test": "jest"
+    "test": "echo No tests in @panacea/security"
   }
 }

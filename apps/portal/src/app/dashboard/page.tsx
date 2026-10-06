@@ -101,7 +101,7 @@ export default function DashboardPage() {
                   Cross-Bank Dockets
                 </div>
                 <div className="text-[10px] text-gray-500 mt-0.5">
-                  Inspect ICICI, Axis & SBI enforcement cases
+                  Inspect empanelled institutional client dockets (ICICI, Axis)
                 </div>
               </Link>
 

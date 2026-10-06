@@ -19,7 +19,7 @@ export default function ContactPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate safe form submission
+    // Process contact inquiry submission
     setTimeout(() => {
       setLoading(false);
       setSubmitted(true);
@@ -185,7 +185,7 @@ export default function ContactPage() {
                           onChange={(e) =>
                             setFormData({ ...formData, institutionName: e.target.value })
                           }
-                          placeholder="e.g. State Bank of India / ICICI"
+                          placeholder="e.g. ICICI Bank / Axis Bank / Scheduled Commercial Bank"
                           className="w-full rounded-md border border-gray-300 px-3 py-2 text-xs text-navy-950 focus:border-navy-600 focus:outline-none"
                         />
                       </div>

@@ -9,8 +9,8 @@ function LoginFormContent() {
   const initialTab = searchParams.get('portal') === 'client' ? 'client' : 'staff';
   const [activeTab, setActiveTab] = useState<'staff' | 'client'>(initialTab);
 
-  const [email, setEmail] = useState('prashant.kumar@panaceaconsultancy.com');
-  const [password, setPassword] = useState('PanaceaSecure2026!#');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [mfaCode, setMfaCode] = useState('');
   const [showMfa, setShowMfa] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -20,12 +20,8 @@ function LoginFormContent() {
   const router = useRouter();
 
   useEffect(() => {
-    if (activeTab === 'staff') {
-      setEmail('prashant.kumar@panaceaconsultancy.com');
-    } else {
-      setEmail('nodal.officer@icicibank.com');
-    }
-    setPassword('PanaceaSecure2026!#');
+    setEmail('');
+    setPassword('');
     setErrorMessage('');
     setShowMfa(false);
   }, [activeTab]);
@@ -37,6 +33,13 @@ function LoginFormContent() {
 
     const res = await login(email, password, showMfa ? mfaCode : undefined);
     setSubmitting(false);
+
+    if (res.mfaEnrollmentRequired) {
+      setErrorMessage(
+        'MFA Enrollment Required: Multi-factor authentication must be enrolled for this privileged account before login can complete.',
+      );
+      return;
+    }
 
     if (res.mfaRequired) {
       setShowMfa(true);
@@ -52,7 +55,7 @@ function LoginFormContent() {
 
   const handleSelectDemoUser = (userEmail: string) => {
     setEmail(userEmail);
-    setPassword('PanaceaSecure2026!#');
+    setPassword('');
     setErrorMessage('');
     setShowMfa(false);
   };
@@ -169,7 +172,7 @@ function LoginFormContent() {
                   required
                   value={mfaCode}
                   onChange={(e) => setMfaCode(e.target.value)}
-                  placeholder="123456"
+                  placeholder="000000"
                   className="w-full rounded-md border border-gray-300 p-2 text-center text-sm font-mono tracking-widest text-navy-950 focus:border-navy-600 focus:outline-none"
                 />
                 <p className="mt-1 text-[10px] text-gray-500">
@@ -197,143 +200,145 @@ function LoginFormContent() {
             </button>
           </form>
 
-          {/* Quick Demo Personas Selector */}
-          <div className="mt-6 pt-5 border-t border-gray-100">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                {activeTab === 'staff'
-                  ? 'Fast-Switch Company & Director Personas'
-                  : 'Fast-Switch Bank Client Personas'}
-              </span>
-              <span className="text-[10px] text-gray-400 font-mono">Password: PanaceaSecure2026!#</span>
+          {/* Quick Demo Personas Selector (Development / Test Environments ONLY — Never exposed in production) */}
+          {process.env.NODE_ENV !== 'production' && (
+            <div className="mt-6 pt-5 border-t border-gray-100">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                  {activeTab === 'staff'
+                    ? 'Fast-Switch Company & Director Personas'
+                    : 'Fast-Switch Bank Client Personas'}
+                </span>
+                <span className="text-[10px] text-gray-400 font-mono">Development Mode</span>
+              </div>
+
+              {activeTab === 'staff' ? (
+                <div className="grid grid-cols-1 gap-1.5 text-left">
+                  <button
+                    type="button"
+                    onClick={() => handleSelectDemoUser('prashant.kumar@panaceaconsultancy.com')}
+                    className={`p-2 rounded border text-left text-[11px] transition-colors ${
+                      email === 'prashant.kumar@panaceaconsultancy.com'
+                        ? 'border-burgundy-800 bg-burgundy-50 font-semibold'
+                        : 'border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-burgundy-950">Mr. Prashant Kumar</span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-burgundy-100 text-burgundy-800 font-bold uppercase">
+                        Managing Director
+                      </span>
+                    </div>
+                    <span className="text-gray-500 text-[10px] block mt-0.5">
+                      Lead Strategist & Executive Platform Super Admin
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleSelectDemoUser('anjana.singh@panaceaconsultancy.com')}
+                    className={`p-2 rounded border text-left text-[11px] transition-colors ${
+                      email === 'anjana.singh@panaceaconsultancy.com'
+                        ? 'border-burgundy-800 bg-burgundy-50 font-semibold'
+                        : 'border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-burgundy-950">Mrs. Anjana Singh</span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-burgundy-100 text-burgundy-800 font-bold uppercase">
+                        Director — Operations
+                      </span>
+                    </div>
+                    <span className="text-gray-500 text-[10px] block mt-0.5">
+                      Field Enforcement Oversight & Institutional Case Management
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleSelectDemoUser('legal.officer@panaceaconsultancy.in')}
+                    className={`p-2 rounded border text-left text-[11px] transition-colors ${
+                      email === 'legal.officer@panaceaconsultancy.in'
+                        ? 'border-navy-800 bg-navy-50 font-semibold'
+                        : 'border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-navy-950">Adv. Rajesh Verma</span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-navy-100 text-navy-800 font-bold uppercase">
+                        Legal Recovery Lead
+                      </span>
+                    </div>
+                    <span className="text-gray-500 text-[10px] block mt-0.5">
+                      SARFAESI Sec 13(2), Sec 14 Petitions & DM Court Liaison
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleSelectDemoUser('investigation@panaceaconsultancy.in')}
+                    className={`p-2 rounded border text-left text-[11px] transition-colors ${
+                      email === 'investigation@panaceaconsultancy.in'
+                        ? 'border-navy-800 bg-navy-50 font-semibold'
+                        : 'border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-navy-950">Suresh Pandey</span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-navy-100 text-navy-800 font-bold uppercase">
+                        Chief Investigator
+                      </span>
+                    </div>
+                    <span className="text-gray-500 text-[10px] block mt-0.5">
+                      Asset Verification, Title Tracing & Fraud Detection Lead
+                    </span>
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-1.5 text-left">
+                  <button
+                    type="button"
+                    onClick={() => handleSelectDemoUser('nodal.officer@icicibank.com')}
+                    className={`p-2 rounded border text-left text-[11px] transition-colors ${
+                      email === 'nodal.officer@icicibank.com'
+                        ? 'border-navy-800 bg-navy-50 font-semibold'
+                        : 'border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-navy-950">ICICI Bank Limited</span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 font-bold uppercase">
+                        SAMG Patna Nodal Desk
+                      </span>
+                    </div>
+                    <span className="text-gray-500 text-[10px] block mt-0.5">
+                      Secured Creditor Mandate — Amitabh Sen
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleSelectDemoUser('recovery.desk@axisbank.com')}
+                    className={`p-2 rounded border text-left text-[11px] transition-colors ${
+                      email === 'recovery.desk@axisbank.com'
+                        ? 'border-navy-800 bg-navy-50 font-semibold'
+                        : 'border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-navy-950">Axis Bank Limited</span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 font-bold uppercase">
+                        Recovery Desk Dhanbad
+                      </span>
+                    </div>
+                    <span className="text-gray-500 text-[10px] block mt-0.5">
+                      Secured Creditor Mandate — Priya Sharma
+                    </span>
+                  </button>
+                </div>
+              )}
             </div>
-
-            {activeTab === 'staff' ? (
-              <div className="grid grid-cols-1 gap-1.5 text-left">
-                <button
-                  type="button"
-                  onClick={() => handleSelectDemoUser('prashant.kumar@panaceaconsultancy.com')}
-                  className={`p-2 rounded border text-left text-[11px] transition-colors ${
-                    email === 'prashant.kumar@panaceaconsultancy.com'
-                      ? 'border-burgundy-800 bg-burgundy-50 font-semibold'
-                      : 'border-gray-200 hover:bg-gray-50'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-burgundy-950">Mr. Prashant Kumar</span>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-burgundy-100 text-burgundy-800 font-bold uppercase">
-                      Managing Director
-                    </span>
-                  </div>
-                  <span className="text-gray-500 text-[10px] block mt-0.5">
-                    Lead Strategist & Executive Platform Super Admin
-                  </span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleSelectDemoUser('anjana.singh@panaceaconsultancy.com')}
-                  className={`p-2 rounded border text-left text-[11px] transition-colors ${
-                    email === 'anjana.singh@panaceaconsultancy.com'
-                      ? 'border-burgundy-800 bg-burgundy-50 font-semibold'
-                      : 'border-gray-200 hover:bg-gray-50'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-burgundy-950">Mrs. Anjana Singh</span>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-burgundy-100 text-burgundy-800 font-bold uppercase">
-                      Director — Operations
-                    </span>
-                  </div>
-                  <span className="text-gray-500 text-[10px] block mt-0.5">
-                    Field Enforcement Oversight & Institutional Case Management
-                  </span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleSelectDemoUser('legal.officer@panaceaconsultancy.in')}
-                  className={`p-2 rounded border text-left text-[11px] transition-colors ${
-                    email === 'legal.officer@panaceaconsultancy.in'
-                      ? 'border-navy-800 bg-navy-50 font-semibold'
-                      : 'border-gray-200 hover:bg-gray-50'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-navy-950">Adv. Rajesh Verma</span>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-navy-100 text-navy-800 font-bold uppercase">
-                      Legal Recovery Lead
-                    </span>
-                  </div>
-                  <span className="text-gray-500 text-[10px] block mt-0.5">
-                    SARFAESI Sec 13(2), Sec 14 Petitions & DM Court Liaison
-                  </span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleSelectDemoUser('investigation@panaceaconsultancy.in')}
-                  className={`p-2 rounded border text-left text-[11px] transition-colors ${
-                    email === 'investigation@panaceaconsultancy.in'
-                      ? 'border-navy-800 bg-navy-50 font-semibold'
-                      : 'border-gray-200 hover:bg-gray-50'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-navy-950">Suresh Pandey</span>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-navy-100 text-navy-800 font-bold uppercase">
-                      Chief Investigator
-                    </span>
-                  </div>
-                  <span className="text-gray-500 text-[10px] block mt-0.5">
-                    Asset Verification, Title Tracing & Fraud Detection Lead
-                  </span>
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 gap-1.5 text-left">
-                <button
-                  type="button"
-                  onClick={() => handleSelectDemoUser('nodal.officer@icicibank.com')}
-                  className={`p-2 rounded border text-left text-[11px] transition-colors ${
-                    email === 'nodal.officer@icicibank.com'
-                      ? 'border-navy-800 bg-navy-50 font-semibold'
-                      : 'border-gray-200 hover:bg-gray-50'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-navy-950">ICICI Bank Limited</span>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 font-bold uppercase">
-                      SAMG Patna Nodal Desk
-                    </span>
-                  </div>
-                  <span className="text-gray-500 text-[10px] block mt-0.5">
-                    Secured Creditor Mandate — Amitabh Sen
-                  </span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleSelectDemoUser('recovery.desk@axisbank.com')}
-                  className={`p-2 rounded border text-left text-[11px] transition-colors ${
-                    email === 'recovery.desk@axisbank.com'
-                      ? 'border-navy-800 bg-navy-50 font-semibold'
-                      : 'border-gray-200 hover:bg-gray-50'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-navy-950">Axis Bank Limited</span>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 font-bold uppercase">
-                      Recovery Desk Dhanbad
-                    </span>
-                  </div>
-                  <span className="text-gray-500 text-[10px] block mt-0.5">
-                    Secured Creditor Mandate — Priya Sharma
-                  </span>
-                </button>
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </div>
     </div>

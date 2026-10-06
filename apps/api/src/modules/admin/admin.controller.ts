@@ -16,38 +16,37 @@ router.get(
   '/audit-logs',
   requireAuth,
   requireRoles(['platform_super_admin', 'security_compliance_admin']),
-  (req: AppRequest, res: Response) => {
-    const { eventType, actorId, orgId, page = '1', pageSize = '50' } = req.query;
+  async (req: AppRequest, res: Response, next) => {
+    try {
+      const { eventType, actorId, orgId, page = '1', pageSize = '50' } = req.query;
 
-    let logs = [...db.auditLogs];
+      const p = Math.max(1, parseInt(page as string, 10) || 1);
+      const ps = Math.min(100, Math.max(1, parseInt(pageSize as string, 10) || 50));
+      const offset = (p - 1) * ps;
 
-    if (eventType && typeof eventType === 'string') {
-      logs = logs.filter((l) => l.event_type === eventType);
-    }
-    if (actorId && typeof actorId === 'string') {
-      logs = logs.filter((l) => l.actor_user_id === actorId);
-    }
-    if (orgId && typeof orgId === 'string') {
-      logs = logs.filter((l) => l.organization_id === orgId);
-    }
+      const result = await db.getAuditLogs({
+        eventType: typeof eventType === 'string' ? eventType : undefined,
+        actorId: typeof actorId === 'string' ? actorId : undefined,
+        orgId: typeof orgId === 'string' ? orgId : undefined,
+        limit: ps,
+        offset,
+      });
 
-    const p = Math.max(1, parseInt(page as string, 10) || 1);
-    const ps = Math.min(100, Math.max(1, parseInt(pageSize as string, 10) || 50));
-    const total = logs.length;
-    const paginated = logs.slice((p - 1) * ps, p * ps);
-
-    return res.status(200).json({
-      data: {
-        items: paginated,
-        pagination: {
-          page: p,
-          pageSize: ps,
-          totalItems: total,
-          totalPages: Math.ceil(total / ps),
+      return res.status(200).json({
+        data: {
+          items: result.items,
+          pagination: {
+            page: p,
+            pageSize: ps,
+            totalItems: result.total,
+            totalPages: Math.ceil(result.total / ps),
+          },
         },
-      },
-      requestId: req.requestId,
-    });
+        requestId: req.requestId,
+      });
+    } catch (err) {
+      return next(err);
+    }
   },
 );
 
@@ -58,18 +57,18 @@ router.get(
   '/security-events',
   requireAuth,
   requireRoles(['platform_super_admin', 'security_compliance_admin']),
-  (req: AppRequest, res: Response) => {
-    const { severity } = req.query;
+  async (req: AppRequest, res: Response, next) => {
+    try {
+      const { severity } = req.query;
+      const events = await db.getSecurityEvents(typeof severity === 'string' ? severity : undefined);
 
-    let events = [...db.securityEvents];
-    if (severity && typeof severity === 'string') {
-      events = events.filter((e) => e.severity === severity);
+      return res.status(200).json({
+        data: events,
+        requestId: req.requestId,
+      });
+    } catch (err) {
+      return next(err);
     }
-
-    return res.status(200).json({
-      data: events,
-      requestId: req.requestId,
-    });
   },
 );
 
@@ -80,18 +79,22 @@ router.get(
   '/security-events/:id',
   requireAuth,
   requireRoles(['platform_super_admin', 'security_compliance_admin']),
-  (req: AppRequest, res: Response, next) => {
-    const { id } = req.params;
-    const event = db.securityEvents.find((e) => e.id === id);
+  async (req: AppRequest, res: Response, next) => {
+    try {
+      const id = req.params.id as string;
+      const event = await db.getSecurityEventById(id);
 
-    if (!event) {
-      return next(new AppError('Security incident event not found.', 'NOT_FOUND', 404));
+      if (!event) {
+        return next(new AppError('Security incident event not found.', 'NOT_FOUND', 404));
+      }
+
+      return res.status(200).json({
+        data: event,
+        requestId: req.requestId,
+      });
+    } catch (err) {
+      return next(err);
     }
-
-    return res.status(200).json({
-      data: event,
-      requestId: req.requestId,
-    });
   },
 );
 
@@ -102,31 +105,34 @@ router.post(
   '/security-events/:id/resolve',
   requireAuth,
   requireRoles(['platform_super_admin', 'security_compliance_admin']),
-  (req: AppRequest, res: Response, next) => {
-    const id = req.params.id as string;
-    const event = db.securityEvents.find((e) => e.id === id);
+  async (req: AppRequest, res: Response, next) => {
+    try {
+      const id = req.params.id as string;
+      const event = await db.getSecurityEventById(id);
 
-    if (!event) {
-      return next(new AppError('Security incident event not found.', 'NOT_FOUND', 404));
+      if (!event) {
+        return next(new AppError('Security incident event not found.', 'NOT_FOUND', 404));
+      }
+
+      const resolved = await db.resolveSecurityEvent(id, req.user!.id);
+
+      logAuditEvent({
+        actorUserId: req.user!.id,
+        eventType: 'SECURITY_EVENT_RESOLVED',
+        action: 'RESOLVE',
+        resourceType: 'SECURITY_EVENT',
+        resourceId: id,
+        result: 'success',
+        requestId: req.requestId,
+      });
+
+      return res.status(200).json({
+        data: resolved,
+        requestId: req.requestId,
+      });
+    } catch (err) {
+      return next(err);
     }
-
-    event.resolved_at = new Date().toISOString();
-    event.resolved_by = req.user!.id;
-
-    logAuditEvent({
-      actorUserId: req.user!.id,
-      eventType: 'SECURITY_EVENT_RESOLVED',
-      action: 'RESOLVE',
-      resourceType: 'SECURITY_EVENT',
-      resourceId: id,
-      result: 'success',
-      requestId: req.requestId,
-    });
-
-    return res.status(200).json({
-      data: event,
-      requestId: req.requestId,
-    });
   },
 );
 

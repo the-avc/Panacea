@@ -57,29 +57,34 @@ export const Navbar: React.FC = () => {
         </nav>
 
         {/* Dual Portal Access Buttons */}
-        <div className="hidden sm:flex items-center gap-2.5">
-          <a
-            href="http://localhost:3001/login?portal=client"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center rounded-md bg-navy-950 px-3.5 py-2 text-xs font-semibold text-white shadow-sm hover:bg-navy-900 active:bg-navy-950 border border-navy-700 transition-colors gap-1.5"
-            title="Secured Creditor Bank Officer Portal"
-          >
-            <span>🏦</span>
-            <span>Bank Client Portal</span>
-          </a>
+        {(() => {
+          const portalBase = process.env.NEXT_PUBLIC_PORTAL_URL || 'http://localhost:3001';
+          return (
+            <div className="hidden sm:flex items-center gap-2.5">
+              <a
+                href={`${portalBase}/login?portal=client`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-md bg-navy-950 px-3.5 py-2 text-xs font-semibold text-white shadow-sm hover:bg-navy-900 active:bg-navy-950 border border-navy-700 transition-colors gap-1.5"
+                title="Secured Creditor Bank Officer Portal"
+              >
+                <span>🏦</span>
+                <span>Bank Client Portal</span>
+              </a>
 
-          <a
-            href="http://localhost:3001/admin/login"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center rounded-md bg-burgundy-900 px-3.5 py-2 text-xs font-semibold text-gold-300 shadow-sm hover:bg-burgundy-800 active:bg-burgundy-950 border border-gold-500/40 transition-colors gap-1.5"
-            title="Panacea Managing Directors & Platform Administrators"
-          >
-            <span>🏛️</span>
-            <span>Directorate & Admin Login</span>
-          </a>
-        </div>
+              <a
+                href={`${portalBase}/admin/login`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-md bg-burgundy-900 px-3.5 py-2 text-xs font-semibold text-gold-300 shadow-sm hover:bg-burgundy-800 active:bg-burgundy-950 border border-gold-500/40 transition-colors gap-1.5"
+                title="Panacea Managing Directors & Platform Administrators"
+              >
+                <span>🏛️</span>
+                <span>Directorate & Admin Login</span>
+              </a>
+            </div>
+          );
+        })()}
 
         {/* Mobile menu toggle */}
         <button
@@ -128,14 +133,14 @@ export const Navbar: React.FC = () => {
             ))}
             <div className="pt-2 border-t border-gray-100 flex flex-col gap-2">
               <a
-                href="http://localhost:3001/login?portal=client"
+                href={`${process.env.NEXT_PUBLIC_PORTAL_URL || 'http://localhost:3001'}/login?portal=client`}
                 className="flex items-center justify-center gap-2 rounded-md bg-navy-950 py-2.5 px-4 text-xs font-semibold text-white border border-navy-700"
               >
                 <span>🏦</span>
                 <span>Bank Client Portal</span>
               </a>
               <a
-                href="http://localhost:3001/admin/login"
+                href={`${process.env.NEXT_PUBLIC_PORTAL_URL || 'http://localhost:3001'}/admin/login`}
                 className="flex items-center justify-center gap-2 rounded-md bg-burgundy-900 py-2.5 px-4 text-xs font-semibold text-gold-300 border border-gold-500/40"
               >
                 <span>🏛️</span>

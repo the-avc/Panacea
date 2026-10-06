@@ -12,34 +12,38 @@ const router = Router();
  * GET /notifications
  * Gets notifications for currently logged in user
  */
-router.get('/', requireAuth, (req: AppRequest, res: Response) => {
-  const userNotifs = db.notifications
-    .filter((n) => n.recipient_user_id === req.user!.id)
-    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+router.get('/', requireAuth, async (req: AppRequest, res: Response, next) => {
+  try {
+    const userNotifs = await db.getNotificationsByUser(req.user!.id);
 
-  return res.status(200).json({
-    data: userNotifs,
-    requestId: req.requestId,
-  });
+    return res.status(200).json({
+      data: userNotifs,
+      requestId: req.requestId,
+    });
+  } catch (err) {
+    return next(err);
+  }
 });
 
 /**
  * PATCH /notifications/:id/read
  */
-router.patch('/:id/read', requireAuth, (req: AppRequest, res: Response, next) => {
-  const { id } = req.params;
-  const notif = db.notifications.find((n) => n.id === id && n.recipient_user_id === req.user!.id);
+router.patch('/:id/read', requireAuth, async (req: AppRequest, res: Response, next) => {
+  try {
+    const id = req.params.id as string;
+    const success = await db.markNotificationRead(id, req.user!.id);
 
-  if (!notif) {
-    return next(new AppError('Notification not found.', 'NOT_FOUND', 404));
+    if (!success) {
+      return next(new AppError('Notification not found.', 'NOT_FOUND', 404));
+    }
+
+    return res.status(200).json({
+      data: { id, read_at: new Date().toISOString() },
+      requestId: req.requestId,
+    });
+  } catch (err) {
+    return next(err);
   }
-
-  notif.read_at = new Date().toISOString();
-
-  return res.status(200).json({
-    data: notif,
-    requestId: req.requestId,
-  });
 });
 
 /**
@@ -49,35 +53,38 @@ router.post(
   '/',
   requireAuth,
   requireRoles(['platform_super_admin', 'operations_admin']),
-  (req: AppRequest, res: Response, next) => {
-    const { recipientUserId, type, title, body } = req.body;
+  async (req: AppRequest, res: Response, next) => {
+    try {
+      const { recipientUserId, type, title, body } = req.body;
 
-    if (!recipientUserId || !title || !body) {
-      return next(
-        new AppError(
-          'Missing required parameters: recipientUserId, title, body.',
-          'VALIDATION_ERROR',
-          400,
-        ),
-      );
+      if (!recipientUserId || !title || !body) {
+        return next(
+          new AppError(
+            'Missing required parameters: recipientUserId, title, body.',
+            'VALIDATION_ERROR',
+            400,
+          ),
+        );
+      }
+
+      const newNotif = {
+        id: uuidv4(),
+        recipient_user_id: recipientUserId,
+        type: type || 'SYSTEM_ALERT',
+        title,
+        body,
+        created_at: new Date().toISOString(),
+      };
+
+      const created = await db.createNotification(newNotif);
+
+      return res.status(201).json({
+        data: created,
+        requestId: req.requestId,
+      });
+    } catch (err) {
+      return next(err);
     }
-
-    const newNotif = {
-      id: uuidv4(),
-      recipient_user_id: recipientUserId,
-      type: type || 'SYSTEM_ALERT',
-      title,
-      body,
-      read_at: null,
-      created_at: new Date().toISOString(),
-    };
-
-    db.notifications.unshift(newNotif);
-
-    return res.status(201).json({
-      data: newNotif,
-      requestId: req.requestId,
-    });
   },
 );
 

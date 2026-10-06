@@ -136,7 +136,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <a
-                  href="http://localhost:3001/login?portal=client"
+                  href={`${process.env.NEXT_PUBLIC_PORTAL_URL || 'http://localhost:3001'}/login?portal=client`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-gold-300 hover:text-gold-200 font-semibold"
@@ -146,7 +146,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <a
-                  href="http://localhost:3001/admin/login"
+                  href={`${process.env.NEXT_PUBLIC_PORTAL_URL || 'http://localhost:3001'}/admin/login`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-burgundy-300 hover:text-burgundy-200 font-semibold"

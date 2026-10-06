@@ -6,16 +6,29 @@ import { db } from '../../database/db';
 import { AppRequest } from '../../common/types';
 import { AppError } from '../../common/filters/error.filter';
 import { requireAuth } from '../../common/guards/auth.guard';
-import { logAuditEvent, logSecurityEvent } from '../../common/middleware/audit';
+import { logAuditEvent } from '../../common/middleware/audit';
+import { rateLimiter } from '../../common/services/rate-limiter.service';
 
 const router = Router();
 
-// Failed login counter for brute-force protection
-const failedLoginAttempts: Record<string, { count: number; lockedUntil: number }> = {};
+// Roles for which MFA enrollment and challenge are strictly mandatory
+export const MANDATORY_MFA_ROLES = new Set([
+  'platform_super_admin',
+  'security_compliance_admin',
+  'operations_admin',
+  'panacea_legal_recovery_user',
+  'panacea_investigation_user',
+]);
+
+// Temporary enrollment challenges (5-minute TTL)
+const pendingEnrollments = new Map<
+  string,
+  { userId: string; email: string; tempSecret: string; expiresAt: number }
+>();
 
 /**
  * POST /auth/login
- * Validates credentials, checks account status, enforces lockout, issues session cookie
+ * Validates credentials, checks account status, enforces lockout, issues secure session cookie
  */
 router.post('/login', async (req: AppRequest, res: Response, next) => {
   try {
@@ -26,19 +39,18 @@ router.post('/login', async (req: AppRequest, res: Response, next) => {
     }
 
     const normalizedEmail = email.toLowerCase().trim();
-    const now = Date.now();
 
-    // Check account lockout
-    const attempt = failedLoginAttempts[normalizedEmail];
-    if (attempt && attempt.lockedUntil > now) {
-      const remainingMin = Math.ceil((attempt.lockedUntil - now) / 60000);
-      logSecurityEvent({
-        eventType: 'LOGIN_BLOCKED_LOCKOUT',
-        severity: 'medium',
-        sourceIp: req.ip,
-        requestId: req.requestId,
-        details: { email: normalizedEmail, remainingMin },
-      });
+    // 1. IP Rate Limiting Check
+    if (!(await rateLimiter.checkIpRateLimit(req.ip || '127.0.0.1'))) {
+      return next(
+        new AppError('Too many requests from this address. Please try again shortly.', 'RATE_LIMITED', 429),
+      );
+    }
+
+    // 2. Account Brute-Force Lockout Check
+    const lockStatus = await rateLimiter.checkAccountLock(normalizedEmail);
+    if (!lockStatus.allowed) {
+      const remainingMin = Math.ceil((lockStatus.retryAfterSeconds || 60) / 60);
       return next(
         new AppError(
           `Account is temporarily locked due to multiple failed login attempts. Try again in ${remainingMin} minutes.`,
@@ -48,14 +60,12 @@ router.post('/login', async (req: AppRequest, res: Response, next) => {
       );
     }
 
-    // Lookup user
-    const user = db.getUserByEmail(normalizedEmail);
+    // 3. User Lookup from PostgreSQL
+    const user = await db.getUserByEmail(normalizedEmail);
     if (!user) {
-      // Record failed attempt
-      failedLoginAttempts[normalizedEmail] = {
-        count: (attempt?.count || 0) + 1,
-        lockedUntil: (attempt?.count || 0) + 1 >= 5 ? now + 15 * 60 * 1000 : 0,
-      };
+      // Execute dummy timing proof to neutralize timing enumeration side-channels
+      await rateLimiter.performDummyTimingProof();
+      await rateLimiter.recordFailedAttempt(normalizedEmail, req.ip || '127.0.0.1', req.requestId);
 
       logAuditEvent({
         actorUserId: null,
@@ -74,11 +84,9 @@ router.post('/login', async (req: AppRequest, res: Response, next) => {
       return next(new AppError('User account is suspended or disabled.', 'FORBIDDEN', 403));
     }
 
-    // Password verification (supports demo password or argon2 hash)
-    const isDemoPassword = password === 'PanaceaSecure2026!#';
-    let isPasswordValid = isDemoPassword;
-
-    if (!isPasswordValid && user.password_hash) {
+    // 4. Strict Password Verification (ZERO universal passwords, ZERO dev bypasses)
+    let isPasswordValid = false;
+    if (user.password_hash) {
       try {
         const argon2 = require('argon2');
         isPasswordValid = await argon2.verify(user.password_hash, password);
@@ -88,23 +96,7 @@ router.post('/login', async (req: AppRequest, res: Response, next) => {
     }
 
     if (!isPasswordValid) {
-      const newCount = (attempt?.count || 0) + 1;
-      const isLocked = newCount >= 5;
-      failedLoginAttempts[normalizedEmail] = {
-        count: newCount,
-        lockedUntil: isLocked ? now + 15 * 60 * 1000 : 0,
-      };
-
-      if (isLocked) {
-        logSecurityEvent({
-          userId: user.id,
-          eventType: 'BRUTE_FORCE_LOCKOUT',
-          severity: 'high',
-          sourceIp: req.ip,
-          requestId: req.requestId,
-          details: { email: normalizedEmail, attempts: newCount },
-        });
-      }
+      const record = await rateLimiter.recordFailedAttempt(normalizedEmail, req.ip || '127.0.0.1', req.requestId);
 
       logAuditEvent({
         actorUserId: user.id,
@@ -113,15 +105,52 @@ router.post('/login', async (req: AppRequest, res: Response, next) => {
         resourceType: 'USER',
         result: 'failure',
         requestId: req.requestId,
-        metadata: { reason: 'Bad password', attemptCount: newCount },
+        metadata: { reason: 'Bad password', remainingAttempts: record.remainingAttempts },
       });
+
+      if (!record.allowed) {
+        return next(
+          new AppError(
+            'Account is temporarily locked due to multiple failed login attempts. Try again in 15 minutes.',
+            'ACCOUNT_LOCKED',
+            429,
+          ),
+        );
+      }
 
       return next(new AppError('Invalid credentials.', 'UNAUTHORIZED', 401));
     }
 
-    // Check MFA if required for admin or if user has configured factors
-    const userFactors = db.mfaFactors.filter((f) => f.user_id === user.id && !f.revoked_at);
-    const requiresMfa = userFactors.length > 0;
+    // 5. Multi-Factor Authentication Enforcement from PostgreSQL
+    const role = await db.getUserRole(user.id);
+    const isPrivileged = role && MANDATORY_MFA_ROLES.has(role.name);
+    const userFactors = await db.getMfaFactorsByUser(user.id);
+    const hasEnrolledMfa = userFactors.length > 0;
+
+    // Privileged accounts MUST have MFA
+    if (isPrivileged && !hasEnrolledMfa) {
+      const enrollmentToken = crypto.randomBytes(32).toString('hex');
+      const tempSecret = authenticator.generateSecret();
+
+      pendingEnrollments.set(enrollmentToken, {
+        userId: user.id,
+        email: user.email,
+        tempSecret,
+        expiresAt: Date.now() + 5 * 60 * 1000,
+      });
+
+      return res.status(200).json({
+        data: {
+          mfaEnrollmentRequired: true,
+          enrollmentToken,
+          message:
+            'Privileged account security policy: Multi-factor authentication enrollment is mandatory before platform access is granted.',
+        },
+        requestId: req.requestId,
+      });
+    }
+
+    const requiresMfa = hasEnrolledMfa || isPrivileged;
 
     if (requiresMfa && !mfaCode) {
       return res.status(200).json({
@@ -134,39 +163,63 @@ router.post('/login', async (req: AppRequest, res: Response, next) => {
       });
     }
 
-    // If MFA code provided, verify it
+    // Cryptographic TOTP Verification (NO 123456 BYPASS)
     if (requiresMfa && mfaCode) {
       const factor = userFactors[0];
+      if (!factor) {
+        return next(new AppError('MFA factor configuration missing.', 'UNAUTHORIZED', 401));
+      }
+
       const isValidTotp = authenticator.verify({
-        token: mfaCode,
+        token: String(mfaCode).trim(),
         secret: factor.credential_reference,
       });
-      if (!isValidTotp && mfaCode !== '123456') {
-        // allow 123456 as dev bypass
-        return next(new AppError('Invalid MFA code.', 'UNAUTHORIZED', 401));
+
+      if (!isValidTotp) {
+        logAuditEvent({
+          actorUserId: user.id,
+          eventType: 'MFA_CHALLENGE_FAILED',
+          action: 'AUTHENTICATE',
+          resourceType: 'MFA',
+          result: 'failure',
+          requestId: req.requestId,
+        });
+
+        return next(new AppError('Invalid multi-factor authentication code.', 'UNAUTHORIZED', 401));
       }
+
+      logAuditEvent({
+        actorUserId: user.id,
+        eventType: 'MFA_CHALLENGE_SUCCESS',
+        action: 'AUTHENTICATE',
+        resourceType: 'MFA',
+        result: 'success',
+        requestId: req.requestId,
+      });
     }
 
-    // Reset failed login counter on success
-    delete failedLoginAttempts[normalizedEmail];
+    // 6. Reset brute-force counter upon successful authentication
+    await rateLimiter.resetAccount(normalizedEmail);
 
-    // Create session
-    const sessionSecret = crypto.randomBytes(32).toString('hex');
-    const org = db.getUserOrg(user.id);
-    const role = db.getUserRole(user.id);
+    // 7. Secure Session Generation:
+    // Generate high-entropy session verifier -> Store SHA-256 verifier hash in PostgreSQL -> Set HttpOnly cookie
+    const sessionVerifier = crypto.randomBytes(32).toString('hex');
+    const sessionHash = crypto.createHash('sha256').update(sessionVerifier).digest('hex');
+
+    const org = await db.getUserOrg(user.id);
     const isSuperAdmin = role?.name === 'platform_super_admin';
 
-    // 15 min for admin, 30 min for portal (SYSTEM-SPEC / UI-SPEC)
+    // Session duration: 15 minutes for admin roles, 30 minutes for standard portal roles
     const sessionDurationMin = isSuperAdmin ? 15 : 30;
     const expiresAt = new Date(Date.now() + sessionDurationMin * 60 * 1000).toISOString();
 
     const sessionRecord = {
       id: uuidv4(),
       user_id: user.id,
-      session_hash: sessionSecret,
+      session_hash: sessionHash, // SHA-256 hash of verifier (RAW VERIFIER NEVER STORED IN DB)
       device_metadata: {
         userAgent: req.headers['user-agent'] || 'Unknown',
-        ip: req.ip,
+        ip: req.ip || '127.0.0.1',
       },
       created_at: new Date().toISOString(),
       expires_at: expiresAt,
@@ -174,14 +227,26 @@ router.post('/login', async (req: AppRequest, res: Response, next) => {
       last_seen_at: new Date().toISOString(),
     };
 
-    db.sessions.push(sessionRecord);
-    user.last_login_at = new Date().toISOString();
+    // Authoritative session insertion in PostgreSQL
+    await db.createSession(sessionRecord);
+    await db.updateUser(user.id, { last_login_at: new Date().toISOString() });
 
-    // Set secure HttpOnly cookie
-    res.cookie('panacea_session', sessionSecret, {
+    // 8. Secure HttpOnly, Strict Session Cookie
+    res.cookie('panacea_session', sessionVerifier, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
+      path: '/',
+      maxAge: sessionDurationMin * 60 * 1000,
+    });
+
+    // 9. Double-Submit CSRF Cookie
+    const csrfToken = crypto.randomBytes(24).toString('hex');
+    res.cookie('panacea_csrf', csrfToken, {
+      httpOnly: false, // JavaScript readable for double-submit header
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
       maxAge: sessionDurationMin * 60 * 1000,
     });
 
@@ -196,6 +261,7 @@ router.post('/login', async (req: AppRequest, res: Response, next) => {
       requestId: req.requestId,
     });
 
+    // Return identity without raw session secret (ZERO localStorage tokens)
     return res.status(200).json({
       data: {
         user: {
@@ -207,9 +273,112 @@ router.post('/login', async (req: AppRequest, res: Response, next) => {
         },
         session: {
           id: sessionRecord.id,
-          token: sessionSecret, // also returned in payload for clients preferring Bearer header
           expiresAt: sessionRecord.expires_at,
         },
+        csrfToken,
+      },
+      requestId: req.requestId,
+    });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/**
+ * POST /auth/mfa/setup
+ * Generates TOTP secret and QR URI for user enrollment
+ */
+router.post('/mfa/setup', (req: AppRequest, res: Response, next) => {
+  try {
+    const { enrollmentToken } = req.body;
+
+    if (!enrollmentToken || !pendingEnrollments.has(enrollmentToken)) {
+      return next(new AppError('Invalid or expired MFA enrollment session.', 'UNAUTHORIZED', 401));
+    }
+
+    const pending = pendingEnrollments.get(enrollmentToken)!;
+    if (pending.expiresAt < Date.now()) {
+      pendingEnrollments.delete(enrollmentToken);
+      return next(new AppError('MFA enrollment window expired. Please sign in again.', 'UNAUTHORIZED', 401));
+    }
+
+    const otpauth = authenticator.keyuri(
+      pending.email,
+      'Panacea Security Platform',
+      pending.tempSecret,
+    );
+
+    return res.status(200).json({
+      data: {
+        secret: pending.tempSecret,
+        otpauthUrl: otpauth,
+        message: 'Scan the QR code or enter the secret key in your authenticator application.',
+      },
+      requestId: req.requestId,
+    });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/**
+ * POST /auth/mfa/verify-setup
+ * Confirms initial TOTP code before activating factor and issuing session
+ */
+router.post('/mfa/verify-setup', async (req: AppRequest, res: Response, next) => {
+  try {
+    const { enrollmentToken, totpCode } = req.body;
+
+    const mfaLimit = await rateLimiter.checkEndpointLimit('mfa_verify', req.ip || '127.0.0.1', 5, 300);
+    if (!mfaLimit.allowed) {
+      return next(new AppError('Too many MFA verification attempts. Please wait before retrying.', 'RATE_LIMITED', 429));
+    }
+
+    if (!enrollmentToken || !pendingEnrollments.has(enrollmentToken)) {
+      return next(new AppError('Invalid or expired MFA enrollment session.', 'UNAUTHORIZED', 401));
+    }
+
+    const pending = pendingEnrollments.get(enrollmentToken)!;
+    if (pending.expiresAt < Date.now()) {
+      pendingEnrollments.delete(enrollmentToken);
+      return next(new AppError('MFA enrollment session expired.', 'UNAUTHORIZED', 401));
+    }
+
+    const isValid = authenticator.verify({
+      token: String(totpCode).trim(),
+      secret: pending.tempSecret,
+    });
+
+    if (!isValid) {
+      return next(new AppError('Invalid TOTP verification code. Setup could not be verified.', 'UNAUTHORIZED', 401));
+    }
+
+    // Persist verified MFA factor in PostgreSQL
+    const factorId = uuidv4();
+    await db.addMfaFactor({
+      id: factorId,
+      user_id: pending.userId,
+      type: 'totp',
+      label: 'Primary Authenticator',
+      credential_reference: pending.tempSecret,
+      created_at: new Date().toISOString(),
+    });
+
+    pendingEnrollments.delete(enrollmentToken);
+
+    logAuditEvent({
+      actorUserId: pending.userId,
+      eventType: 'MFA_FACTOR_ENROLLED',
+      action: 'ENROLL',
+      resourceType: 'MFA',
+      resourceId: factorId,
+      result: 'success',
+      requestId: req.requestId,
+    });
+
+    return res.status(200).json({
+      data: {
+        message: 'MFA successfully enrolled and verified. Please sign in with your authenticator code.',
       },
       requestId: req.requestId,
     });
@@ -220,18 +389,16 @@ router.post('/login', async (req: AppRequest, res: Response, next) => {
 
 /**
  * POST /auth/logout
- * Terminates session server-side, revokes cookie
+ * Terminates session server-side in PostgreSQL, revokes cookies
  */
-router.post('/logout', requireAuth, (req: AppRequest, res: Response, next) => {
+router.post('/logout', requireAuth, async (req: AppRequest, res: Response, next) => {
   try {
     if (req.sessionId) {
-      const session = db.sessions.find((s) => s.id === req.sessionId);
-      if (session) {
-        session.revoked_at = new Date().toISOString();
-      }
+      await db.revokeSession(req.sessionId);
     }
 
-    res.clearCookie('panacea_session');
+    res.clearCookie('panacea_session', { path: '/' });
+    res.clearCookie('panacea_csrf', { path: '/' });
 
     logAuditEvent({
       actorUserId: req.user?.id,
@@ -269,12 +436,12 @@ router.get('/me', requireAuth, (req: AppRequest, res: Response) => {
 
 /**
  * GET /auth/sessions
- * Returns user's active sessions
+ * Returns user's active sessions from PostgreSQL
  */
-router.get('/sessions', requireAuth, (req: AppRequest, res: Response) => {
-  const activeSessions = db.sessions
-    .filter((s) => s.user_id === req.user?.id && !s.revoked_at)
-    .map((s) => ({
+router.get('/sessions', requireAuth, async (req: AppRequest, res: Response, next) => {
+  try {
+    const activeSessionsFromDb = await db.getActiveSessionsByUser(req.user!.id);
+    const activeSessions = activeSessionsFromDb.map((s) => ({
       id: s.id,
       isCurrent: s.id === req.sessionId,
       deviceMetadata: s.device_metadata,
@@ -283,49 +450,63 @@ router.get('/sessions', requireAuth, (req: AppRequest, res: Response) => {
       lastSeenAt: s.last_seen_at,
     }));
 
-  return res.status(200).json({
-    data: activeSessions,
-    requestId: req.requestId,
-  });
+    return res.status(200).json({
+      data: activeSessions,
+      requestId: req.requestId,
+    });
+  } catch (err) {
+    return next(err);
+  }
 });
 
 /**
  * POST /auth/sessions/:id/revoke
- * Revokes a specific session
+ * Revokes a specific session in PostgreSQL
  */
-router.post('/sessions/:id/revoke', requireAuth, (req: AppRequest, res: Response, next) => {
-  const id = req.params.id as string;
-  const session = db.sessions.find((s) => s.id === id && s.user_id === req.user?.id);
+router.post('/sessions/:id/revoke', requireAuth, async (req: AppRequest, res: Response, next) => {
+  try {
+    const id = req.params.id as string;
+    const session = await db.getSessionById(id);
 
-  if (!session) {
-    return next(new AppError('Session not found.', 'NOT_FOUND', 404));
+    if (!session || session.user_id !== req.user?.id) {
+      return next(new AppError('Session not found.', 'NOT_FOUND', 404));
+    }
+
+    await db.revokeSession(id);
+
+    logAuditEvent({
+      actorUserId: req.user?.id,
+      eventType: 'SESSION_REVOKED',
+      action: 'REVOKE',
+      resourceType: 'SESSION',
+      resourceId: id,
+      result: 'success',
+      requestId: req.requestId,
+    });
+
+    return res.status(200).json({
+      data: { message: 'Session revoked successfully.' },
+      requestId: req.requestId,
+    });
+  } catch (err) {
+    return next(err);
   }
-
-  session.revoked_at = new Date().toISOString();
-
-  logAuditEvent({
-    actorUserId: req.user?.id,
-    eventType: 'SESSION_REVOKED',
-    action: 'REVOKE',
-    resourceType: 'SESSION',
-    resourceId: id,
-    result: 'success',
-    requestId: req.requestId,
-  });
-
-  return res.status(200).json({
-    data: { message: 'Session revoked successfully.' },
-    requestId: req.requestId,
-  });
 });
 
 /**
  * POST /auth/password/reset/request
  * Safe password reset request (never reveals whether email exists)
  */
-router.post('/password/reset/request', (req: AppRequest, res: Response) => {
-  const { email } = req.body;
-  if (email) {
+router.post('/password/reset/request', async (req: AppRequest, res: Response, next) => {
+  try {
+    const { email } = req.body;
+
+    const resetLimit = await rateLimiter.checkEndpointLimit('password_reset', req.ip || '127.0.0.1', 5, 300);
+    if (!resetLimit.allowed) {
+      return next(new AppError('Too many password reset requests. Please wait before retrying.', 'RATE_LIMITED', 429));
+    }
+
+    if (email) {
     logAuditEvent({
       actorUserId: null,
       eventType: 'PASSWORD_RESET_REQUESTED',
@@ -333,7 +514,7 @@ router.post('/password/reset/request', (req: AppRequest, res: Response) => {
       resourceType: 'USER',
       result: 'success',
       requestId: req.requestId,
-      metadata: { requestedEmail: email.toLowerCase() },
+      metadata: { requestedEmail: String(email).toLowerCase() },
     });
   }
 
@@ -344,6 +525,9 @@ router.post('/password/reset/request', (req: AppRequest, res: Response) => {
     },
     requestId: req.requestId,
   });
+  } catch (err) {
+    return next(err);
+  }
 });
 
 export default router;

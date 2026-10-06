@@ -292,8 +292,8 @@ export default function AdminUsersPage() {
                 </div>
 
                 <div className="p-3 bg-gray-50 rounded-md border border-gray-200 text-[11px] text-gray-500">
-                  <span className="font-semibold text-navy-950 block mb-0.5">Default Security Credential:</span>
-                  Initial password will be set to <code className="font-mono text-navy-900 font-bold bg-white px-1 py-0.5 rounded border border-gray-200">PanaceaSecure2026!#</code>. Officer must change password on initial login.
+                  <span className="font-semibold text-navy-950 block mb-0.5">Secure Credential Provisioning:</span>
+                  A cryptographically unique temporary password will be generated upon creation. The user will be required to configure mandatory MFA upon initial authentication.
                 </div>
 
                 <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-gray-100">

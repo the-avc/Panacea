@@ -9,6 +9,7 @@ import { logAuditEvent } from '../../common/middleware/audit';
 import {
   getCaseDocumentsHandler,
   uploadCaseDocumentHandler,
+  upload,
 } from '../documents/documents.controller';
 
 const router = Router();
@@ -30,315 +31,317 @@ const VALID_TRANSITIONS: Record<string, string[]> = {
  * GET /cases
  * Retrieves cases scoped to the user's organization (or all cases for Panacea internal staff)
  */
-router.get('/', requireAuth, (req: AppRequest, res: Response) => {
-  const { status, search, page = '1', pageSize = '25' } = req.query;
-  const isInternal = isPanaceaInternalRole(req.user!.role);
+router.get('/', requireAuth, async (req: AppRequest, res: Response, next) => {
+  try {
+    const { status, search, page = '1', pageSize = '25' } = req.query;
+    const isInternal = isPanaceaInternalRole(req.user!.role);
 
-  let caseList = isInternal ? [...db.cases] : db.getCasesByOrg(req.user!.organization_id);
+    const p = Math.max(1, parseInt(page as string, 10) || 1);
+    const ps = Math.min(100, Math.max(1, parseInt(pageSize as string, 10) || 25));
+    const offset = (p - 1) * ps;
 
-  // Filter by status
-  if (status && typeof status === 'string') {
-    caseList = caseList.filter((c) => c.status === status);
-  }
+    const result = await db.getCases({
+      orgId: isInternal ? undefined : req.user!.organization_id,
+      status: typeof status === 'string' ? status : undefined,
+      search: typeof search === 'string' ? search : undefined,
+      limit: ps,
+      offset,
+    });
 
-  // Search filter
-  if (search && typeof search === 'string') {
-    const term = search.toLowerCase();
-    caseList = caseList.filter(
-      (c) =>
-        c.title.toLowerCase().includes(term) ||
-        (c.external_reference && c.external_reference.toLowerCase().includes(term)),
-    );
-  }
+    const totalPages = Math.ceil(result.total / ps);
 
-  // Bounded pagination
-  const p = Math.max(1, parseInt(page as string, 10) || 1);
-  const ps = Math.min(100, Math.max(1, parseInt(pageSize as string, 10) || 25));
-  const total = caseList.length;
-  const totalPages = Math.ceil(total / ps);
-  const paginated = caseList.slice((p - 1) * ps, p * ps);
-
-  return res.status(200).json({
-    data: {
-      items: paginated,
-      pagination: {
-        page: p,
-        pageSize: ps,
-        totalItems: total,
-        totalPages,
+    return res.status(200).json({
+      data: {
+        items: result.items,
+        pagination: {
+          page: p,
+          pageSize: ps,
+          totalItems: result.total,
+          totalPages,
+        },
       },
-    },
-    requestId: req.requestId,
-  });
+      requestId: req.requestId,
+    });
+  } catch (err) {
+    return next(err);
+  }
 });
 
 /**
  * GET /cases/:id
  * Retrieves single case with tenant isolation check
  */
-router.get('/:id', requireAuth, (req: AppRequest, res: Response, next) => {
-  const id = req.params.id as string;
-  const isInternal = isPanaceaInternalRole(req.user!.role);
+router.get('/:id', requireAuth, async (req: AppRequest, res: Response, next) => {
+  try {
+    const id = req.params.id as string;
+    const isInternal = isPanaceaInternalRole(req.user!.role);
 
-  const foundCase = isInternal
-    ? db.cases.find((c) => c.id === id)
-    : db.getCaseByIdAndOrg(id, req.user!.organization_id);
+    const foundCase = await db.getCaseById(id, isInternal ? undefined : req.user!.organization_id);
 
-  if (!foundCase) {
-    // Return 404 to avoid leaking existence across tenants
-    return next(new AppError('Case docket not found.', 'NOT_FOUND', 404));
+    if (!foundCase) {
+      // Return 404 to avoid leaking existence across tenants
+      return next(new AppError('Case docket not found.', 'NOT_FOUND', 404));
+    }
+
+    // Attach organization and document count
+    const org = await db.getOrgById(foundCase.organization_id);
+    const docs = await db.getDocumentsByCase(foundCase.id);
+    const docCount = docs.length;
+
+    return res.status(200).json({
+      data: {
+        ...foundCase,
+        organizationName: org?.legal_name || 'Unknown',
+        documentCount: docCount,
+      },
+      requestId: req.requestId,
+    });
+  } catch (err) {
+    return next(err);
   }
-
-  // Attach organization and document count
-  const org = db.getOrgById(foundCase.organization_id);
-  const docCount = db.getDocumentsByCase(foundCase.id).length;
-
-  return res.status(200).json({
-    data: {
-      ...foundCase,
-      organizationName: org?.legal_name || 'Unknown',
-      documentCount: docCount,
-    },
-    requestId: req.requestId,
-  });
 });
 
 /**
  * POST /cases
  * Creates a new case docket
  */
-router.post('/', requireAuth, (req: AppRequest, res: Response, next) => {
-  const { title, external_reference, classification = 'confidential', organization_id } = req.body;
+router.post('/', requireAuth, async (req: AppRequest, res: Response, next) => {
+  try {
+    const { title, external_reference, classification = 'confidential', organization_id } = req.body;
 
-  if (!title) {
-    return next(new AppError('Case title is required.', 'VALIDATION_ERROR', 400));
+    if (!title) {
+      return next(new AppError('Case title is required.', 'VALIDATION_ERROR', 400));
+    }
+
+    const isInternal = isPanaceaInternalRole(req.user!.role);
+    // Institutional clients can only create cases for their own organization
+    const targetOrgId = isInternal && organization_id ? organization_id : req.user!.organization_id;
+
+    const newCase = {
+      id: uuidv4(),
+      organization_id: targetOrgId,
+      external_reference: external_reference || null,
+      title,
+      status: 'intake',
+      classification,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    const initialHistory = {
+      id: uuidv4(),
+      case_id: newCase.id,
+      old_status: null,
+      new_status: 'intake',
+      changed_by: req.user!.id,
+      changed_at: new Date().toISOString(),
+      reason: 'Initial case docket intake',
+    };
+
+    await db.createCase(newCase, initialHistory);
+
+    logAuditEvent({
+      actorUserId: req.user!.id,
+      organizationId: targetOrgId,
+      eventType: 'CASE_CREATED',
+      action: 'CREATE',
+      resourceType: 'CASE',
+      resourceId: newCase.id,
+      result: 'success',
+      requestId: req.requestId,
+    });
+
+    return res.status(201).json({
+      data: newCase,
+      requestId: req.requestId,
+    });
+  } catch (err) {
+    return next(err);
   }
-
-  const isInternal = isPanaceaInternalRole(req.user!.role);
-  // Institutional clients can only create cases for their own organization
-  const targetOrgId = isInternal && organization_id ? organization_id : req.user!.organization_id;
-
-  const newCase = {
-    id: uuidv4(),
-    organization_id: targetOrgId,
-    external_reference: external_reference || null,
-    title,
-    status: 'intake',
-    classification,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  };
-
-  db.cases.unshift(newCase);
-
-  // Initial status history
-  db.caseStatusHistory.push({
-    id: uuidv4(),
-    case_id: newCase.id,
-    old_status: null,
-    new_status: 'intake',
-    changed_by: req.user!.id,
-    changed_at: new Date().toISOString(),
-    reason: 'Initial case docket intake',
-  });
-
-  logAuditEvent({
-    actorUserId: req.user!.id,
-    organizationId: targetOrgId,
-    eventType: 'CASE_CREATED',
-    action: 'CREATE',
-    resourceType: 'CASE',
-    resourceId: newCase.id,
-    result: 'success',
-    requestId: req.requestId,
-  });
-
-  return res.status(201).json({
-    data: newCase,
-    requestId: req.requestId,
-  });
 });
 
 /**
  * POST /cases/:id/status
  * Transition case status validated against the state machine
  */
-router.post('/:id/status', requireAuth, (req: AppRequest, res: Response, next) => {
-  const id = req.params.id as string;
-  const { newStatus, reason } = req.body;
-  const isInternal = isPanaceaInternalRole(req.user!.role);
+router.post('/:id/status', requireAuth, async (req: AppRequest, res: Response, next) => {
+  try {
+    const id = req.params.id as string;
+    const { newStatus, reason } = req.body;
+    const isInternal = isPanaceaInternalRole(req.user!.role);
 
-  const foundCase = isInternal
-    ? db.cases.find((c) => c.id === id)
-    : db.getCaseByIdAndOrg(id, req.user!.organization_id);
+    const foundCase = await db.getCaseById(id, isInternal ? undefined : req.user!.organization_id);
 
-  if (!foundCase) {
-    return next(new AppError('Case docket not found.', 'NOT_FOUND', 404));
+    if (!foundCase) {
+      return next(new AppError('Case docket not found.', 'NOT_FOUND', 404));
+    }
+
+    if (!newStatus) {
+      return next(new AppError('New status is required.', 'VALIDATION_ERROR', 400));
+    }
+
+    // Validate state machine transition
+    const allowedNext = VALID_TRANSITIONS[foundCase.status] || [];
+    if (!allowedNext.includes(newStatus)) {
+      return next(
+        new AppError(
+          `Invalid status transition from '${foundCase.status}' to '${newStatus}'. Allowed transitions: ${allowedNext.join(', ')}`,
+          'INVALID_STATUS_TRANSITION',
+          400,
+        ),
+      );
+    }
+
+    const oldStatus = foundCase.status;
+
+    // Record history
+    const historyRecord = {
+      id: uuidv4(),
+      case_id: foundCase.id,
+      old_status: oldStatus,
+      new_status: newStatus,
+      changed_by: req.user!.id,
+      changed_at: new Date().toISOString(),
+      reason: reason || null,
+    };
+
+    const updatedCase = await db.updateCaseStatus(foundCase.id, newStatus, historyRecord);
+
+    logAuditEvent({
+      actorUserId: req.user!.id,
+      organizationId: foundCase.organization_id,
+      eventType: 'CASE_STATUS_CHANGED',
+      action: 'CHANGE_STATUS',
+      resourceType: 'CASE',
+      resourceId: foundCase.id,
+      result: 'success',
+      requestId: req.requestId,
+      metadata: { oldStatus, newStatus, reason },
+    });
+
+    return res.status(200).json({
+      data: {
+        case: updatedCase,
+        transition: historyRecord,
+      },
+      requestId: req.requestId,
+    });
+  } catch (err) {
+    return next(err);
   }
-
-  if (!newStatus) {
-    return next(new AppError('New status is required.', 'VALIDATION_ERROR', 400));
-  }
-
-  // Validate state machine transition
-  const allowedNext = VALID_TRANSITIONS[foundCase.status] || [];
-  if (!allowedNext.includes(newStatus)) {
-    return next(
-      new AppError(
-        `Invalid status transition from '${foundCase.status}' to '${newStatus}'. Allowed transitions: ${allowedNext.join(', ')}`,
-        'INVALID_STATUS_TRANSITION',
-        400,
-      ),
-    );
-  }
-
-  const oldStatus = foundCase.status;
-  foundCase.status = newStatus;
-  foundCase.updated_at = new Date().toISOString();
-
-  // Record history
-  const historyRecord = {
-    id: uuidv4(),
-    case_id: foundCase.id,
-    old_status: oldStatus,
-    new_status: newStatus,
-    changed_by: req.user!.id,
-    changed_at: new Date().toISOString(),
-    reason: reason || null,
-  };
-  db.caseStatusHistory.unshift(historyRecord);
-
-  logAuditEvent({
-    actorUserId: req.user!.id,
-    organizationId: foundCase.organization_id,
-    eventType: 'CASE_STATUS_CHANGED',
-    action: 'CHANGE_STATUS',
-    resourceType: 'CASE',
-    resourceId: foundCase.id,
-    result: 'success',
-    requestId: req.requestId,
-    metadata: { oldStatus, newStatus, reason },
-  });
-
-  return res.status(200).json({
-    data: {
-      case: foundCase,
-      transition: historyRecord,
-    },
-    requestId: req.requestId,
-  });
 });
 
 /**
  * GET /cases/:id/history
  * Returns complete status timeline for a case
  */
-router.get('/:id/history', requireAuth, (req: AppRequest, res: Response, next) => {
-  const id = req.params.id as string;
-  const isInternal = isPanaceaInternalRole(req.user!.role);
+router.get('/:id/history', requireAuth, async (req: AppRequest, res: Response, next) => {
+  try {
+    const id = req.params.id as string;
+    const isInternal = isPanaceaInternalRole(req.user!.role);
 
-  const foundCase = isInternal
-    ? db.cases.find((c) => c.id === id)
-    : db.getCaseByIdAndOrg(id, req.user!.organization_id);
+    const foundCase = await db.getCaseById(id, isInternal ? undefined : req.user!.organization_id);
 
-  if (!foundCase) {
-    return next(new AppError('Case docket not found.', 'NOT_FOUND', 404));
-  }
+    if (!foundCase) {
+      return next(new AppError('Case docket not found.', 'NOT_FOUND', 404));
+    }
 
-  const history = db.caseStatusHistory
-    .filter((h) => h.case_id === id)
-    .map((h) => {
-      const user = db.getUserById(h.changed_by);
-      return {
-        ...h,
-        changedByName: user?.display_name || 'System Operator',
-      };
+    const rawHistory = await db.getCaseHistory(id);
+    const history = await Promise.all(
+      rawHistory.map(async (h) => {
+        const user = await db.getUserById(h.changed_by);
+        return {
+          ...h,
+          changedByName: user?.display_name || 'System Operator',
+        };
+      }),
+    );
+
+    return res.status(200).json({
+      data: history,
+      requestId: req.requestId,
     });
-
-  return res.status(200).json({
-    data: history,
-    requestId: req.requestId,
-  });
+  } catch (err) {
+    return next(err);
+  }
 });
 
 /**
  * GET /cases/:id/assignments
  */
-router.get('/:id/assignments', requireAuth, (req: AppRequest, res: Response, next) => {
-  const id = req.params.id as string;
-  const isInternal = isPanaceaInternalRole(req.user!.role);
+router.get('/:id/assignments', requireAuth, async (req: AppRequest, res: Response, next) => {
+  try {
+    const id = req.params.id as string;
+    const isInternal = isPanaceaInternalRole(req.user!.role);
 
-  const foundCase = isInternal
-    ? db.cases.find((c) => c.id === id)
-    : db.getCaseByIdAndOrg(id, req.user!.organization_id);
+    const foundCase = await db.getCaseById(id, isInternal ? undefined : req.user!.organization_id);
 
-  if (!foundCase) {
-    return next(new AppError('Case docket not found.', 'NOT_FOUND', 404));
-  }
+    if (!foundCase) {
+      return next(new AppError('Case docket not found.', 'NOT_FOUND', 404));
+    }
 
-  const assignments = db.caseAssignments
-    .filter((a) => a.case_id === id && !a.revoked_at)
-    .map((a) => {
-      const user = a.user_id ? db.getUserById(a.user_id) : null;
-      return {
-        ...a,
-        userDisplayName: user?.display_name || null,
-        userEmail: user?.email || null,
-      };
+    const assignments = await db.getCaseAssignments(id);
+
+    return res.status(200).json({
+      data: assignments,
+      requestId: req.requestId,
     });
-
-  return res.status(200).json({
-    data: assignments,
-    requestId: req.requestId,
-  });
+  } catch (err) {
+    return next(err);
+  }
 });
 
 /**
  * POST /cases/:id/assignments
  */
-router.post('/:id/assignments', requireAuth, (req: AppRequest, res: Response, next) => {
-  const id = req.params.id as string;
-  const { userId, teamReference, assignmentType = 'LEAD_OFFICER' } = req.body;
+router.post('/:id/assignments', requireAuth, async (req: AppRequest, res: Response, next) => {
+  try {
+    const id = req.params.id as string;
+    const { userId, teamReference, assignmentType = 'LEAD_OFFICER' } = req.body;
 
-  if (!userId && !teamReference) {
-    return next(
-      new AppError('Either userId or teamReference must be provided.', 'VALIDATION_ERROR', 400),
-    );
+    if (!userId && !teamReference) {
+      return next(
+        new AppError('Either userId or teamReference must be provided.', 'VALIDATION_ERROR', 400),
+      );
+    }
+
+    const isInternal = isPanaceaInternalRole(req.user!.role);
+    const foundCase = await db.getCaseById(id, isInternal ? undefined : req.user!.organization_id);
+    if (!foundCase) {
+      return next(new AppError('Case docket not found.', 'NOT_FOUND', 404));
+    }
+
+    const newAssignment = {
+      id: uuidv4(),
+      case_id: id,
+      user_id: userId || null,
+      team_reference: teamReference || null,
+      assignment_type: assignmentType,
+      assigned_at: new Date().toISOString(),
+      revoked_at: null,
+    };
+
+    await db.addCaseAssignment(newAssignment);
+
+    logAuditEvent({
+      actorUserId: req.user!.id,
+      organizationId: foundCase.organization_id,
+      eventType: 'CASE_ASSIGNED',
+      action: 'ASSIGN',
+      resourceType: 'CASE',
+      resourceId: id,
+      result: 'success',
+      requestId: req.requestId,
+      metadata: { assignmentType, userId, teamReference },
+    });
+
+    return res.status(201).json({
+      data: newAssignment,
+      requestId: req.requestId,
+    });
+  } catch (err) {
+    return next(err);
   }
-
-  const foundCase = db.cases.find((c) => c.id === id);
-  if (!foundCase) {
-    return next(new AppError('Case docket not found.', 'NOT_FOUND', 404));
-  }
-
-  const newAssignment = {
-    id: uuidv4(),
-    case_id: id,
-    user_id: userId || null,
-    team_reference: teamReference || null,
-    assignment_type: assignmentType,
-    assigned_at: new Date().toISOString(),
-    revoked_at: null,
-  };
-
-  db.caseAssignments.push(newAssignment);
-
-  logAuditEvent({
-    actorUserId: req.user!.id,
-    organizationId: foundCase.organization_id,
-    eventType: 'CASE_ASSIGNED',
-    action: 'ASSIGN',
-    resourceType: 'CASE',
-    resourceId: id,
-    result: 'success',
-    requestId: req.requestId,
-    metadata: { assignmentType, userId, teamReference },
-  });
-
-  return res.status(201).json({
-    data: newAssignment,
-    requestId: req.requestId,
-  });
 });
 
 /**
@@ -346,7 +349,11 @@ router.post('/:id/assignments', requireAuth, (req: AppRequest, res: Response, ne
  * POST /cases/:id/documents/upload
  */
 router.get('/:id/documents', requireAuth, getCaseDocumentsHandler);
-router.post('/:id/documents/upload', requireAuth, uploadCaseDocumentHandler);
+router.post(
+  '/:id/documents/upload',
+  requireAuth,
+  upload.single('file'),
+  uploadCaseDocumentHandler,
+);
 
 export default router;
-

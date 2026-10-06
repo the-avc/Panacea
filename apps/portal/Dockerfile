@@ -55,5 +55,8 @@ USER panacea
 
 EXPOSE 3001
 
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:3001 || exit 1
+
 ENTRYPOINT ["dumb-init", "--"]
 CMD ["node_modules/.bin/next", "start", "apps/portal", "-p", "3001"]
