@@ -1,0 +1,111 @@
+# ===================================================================
+# PANACEA CONSULTANCY PRIVATE LIMITED
+# Master .gitignore — Security-Hardened Institutional Monorepo
+# ===================================================================
+
+# ---- Package Managers & Dependencies ----
+node_modules/
+.pnpm-store/
+.npm/
+.yarn/
+package-lock.json
+yarn.lock
+
+# ---- Build Outputs & Compiled Code ----
+dist/
+build/
+out/
+.next/
+apps/*/.next/
+apps/*/out/
+apps/*/dist/
+packages/*/dist/
+*.tsbuildinfo
+
+# ---- Turborepo Cache ----
+.turbo/
+
+# ---- Environment Variables & Secrets (CRITICAL SECURITY) ----
+# Never commit real environment secrets, API keys, or database credentials
+.env
+.env.local
+.env.development
+.env.staging
+.env.production
+.env.*.local
+*.env
+
+# Explicitly allow the template file
+!.env.example
+
+# ---- Cryptographic Certificates & Private Keys ----
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+secrets/
+credentials/
+
+# ---- Local Database & Storage Volumes ----
+infrastructure/docker/pgdata/
+infrastructure/docker/minio-data/
+infrastructure/docker/data/
+pgdata/
+minio-data/
+*.sqlite
+*.sqlite3
+*.db
+
+# ---- Testing, Coverage & Playwright Artifacts ----
+coverage/
+*.lcov
+.nyc_output/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# ---- Logs & Process Dumps ----
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# ---- Operating System Files ----
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ---- IDEs & Code Editors ----
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*~
+
+# ---- Temporary & Scratch Directories ----
+tmp/
+temp/
+.cache/
+scratch/
+.system_generated/
