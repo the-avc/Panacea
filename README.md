@@ -1,29 +1,24 @@
-# PANACEA CONSULTANCY PRIVATE LIMITED
-## Official Institutional Digital Platform & Secure Client Portal
+# Secured Creditor Enforcement & Institutional Operations Platform
+## Enterprise Secured Client & Administrative Command Portal
 
-Production-grade, institutional, security-first digital ecosystem built strictly in compliance with the **Panacea Consultancy Specification Package** (`SYSTEM-SPEC.md`, `UI-SPEC.md`, `ERD.md`, `API-SPEC.md`, `AUTH-RBAC.md`, `SECURITY.md`, `THREAT-MODEL.md`, `DATA-CLASSIFICATION.md`, and the verified Company Profile).
+Production-grade, institutional, security-first digital ecosystem built strictly for secured creditor enforcement, multi-tenant bank recovery tracking, and regulatory compliance under the **SARFAESI Act, 2002** and related statutory frameworks.
 
 ---
 
-## 🏛️ Verified Corporate Identity & Grounding
+## 🏛️ Domain Context & Operational Scope
 
-- **Company Name:** Panacea Consultancy Private Limited
-- **Corporate Office:** 204, 2nd Floor, Jyoti Tower, Near Alankar Auto, Kankarbagh Main Road, Patna, Bihar — 800020
-- **Jharkhand Office:** Beside S.B.I. Bank, Old Meena Bazar, Mandu, Dist. Ramgarh, Jharkhand — 825316
-- **Operating Regions:** Bihar, Jharkhand, and Chhattisgarh
-- **Leadership:**
-  - **Mr. Prashant Kumar**, Managing Director & Lead Strategist
-  - **Mrs. Anjana Singh**, Director & Operations Oversight
-- **Direct Contacts:** `+91-9304897257`, `+91-9431432983`
-- **Official Inquiries:** `panaceaconsultancypvtltd@gmail.com`
-- **Core Domain:** Secured Creditor Enforcement Services under the SARFAESI Act, 2002 (Sections 13(2), 13(4), & 14), Physical Asset Verification, Title Search, Third-Party Fraud Investigation, and DRT Litigation Assistance.
+- **Platform Scope:** Institutional Para-Legal & Enforcement Support for Secured Creditors (Scheduled Commercial Banks, Housing Finance Companies, NBFCs, and ARCs).
+- **Core Operations:**
+  - **SARFAESI Act, 2002 Enforcement:** Section 13(2) Demand Notices, Section 13(4) Possession Notices, Section 14 District Magistrate / Chief Metropolitan Magistrate Petitions & Affidavits, Physical Asset Possession Execution, Police Protection Coordination, and Public Auction Liaison.
+  - **Field Investigation & Intelligence:** Pre-enforcement Asset Verification, Borrower Locating, Title Tracing, Valuation Assistance, and Financial Fraud Detection.
+- **Operating Jurisdiction:** Multi-state regional jurisdictional enforcement (Eastern Regional Corridors).
 
 ---
 
 ## 🏗️ Architecture & Monorepo Topology
 
 ```
-Panacea/
+platform/
 ├── apps/
 │   ├── web/           # Public Institutional Portal (Next.js 14 App Router, Port 3000)
 │   ├── portal/        # Secure Authenticated Client & Directorate Portal (Next.js 14, Port 3001)
@@ -31,7 +26,7 @@ Panacea/
 ├── packages/
 │   ├── types/         # Canonical Domain Interfaces, SARFAESI State Machine, DTOs
 │   ├── security/      # Cryptographic hashing, MIME/Magic-byte verification, Sanitization
-│   ├── config/        # Environment configurations, System Timeouts, Contact Registry
+│   ├── config/        # Environment configurations, System Timeouts, System Constants
 │   └── ui/            # Institutional Design System & Accessible Component Suite (18 Components)
 ├── infrastructure/
 │   ├── docker/        # PostgreSQL 16 & MinIO S3 Object Storage with Secure Private Bucket Policy
@@ -121,7 +116,7 @@ pnpm --filter @panacea/ui build
 You can run the platform in one of two modes:
 
 #### Option A: Zero-Configuration Mode (Default / Fastest)
-No Docker required. The backend API (`@panacea/api`) includes an **in-memory secure datastore** preloaded with realistic test cases, documents, audit logs, and verified leadership credentials. You can skip directly to **Step 6**.
+No Docker required. The backend API (`@panacea/api`) includes an **in-memory secure datastore** preloaded with realistic test cases, documents, audit logs, and pre-configured leadership credentials. You can skip directly to **Step 6**.
 
 #### Option B: Live PostgreSQL 16 & MinIO S3 Containers
 To run against actual PostgreSQL and MinIO S3 object storage:
@@ -192,29 +187,29 @@ Once running, access the services at:
 
 | Service | Local URL | Description |
 | :--- | :--- | :--- |
-| **Public Institutional Website** | [http://localhost:3000](http://localhost:3000) | Public brand identity, SARFAESI services, leadership profiles & contacts |
-| **Directorate & Admin Gateway** | [http://localhost:3001/admin/login](http://localhost:3001/admin/login) | Executive Command Center for Directors and Operations Staff |
-| **Empanelled Bank Client Desk** | [http://localhost:3001/login?portal=client](http://localhost:3001/login?portal=client) | Restricted portal for Bank Nodal Desks (ICICI, Axis, SBI) |
-| **Platform Command Center** | [http://localhost:3001/admin](http://localhost:3001/admin) | System administration, user onboarding & audit trails |
+| **Public Institutional Website** | [http://localhost:3000](http://localhost:3000) | Public brand identity, SARFAESI services, operational scope & institutional inquiries |
+| **Directorate & Admin Gateway** | [http://localhost:3001/admin/login](http://localhost:3001/admin/login) | Executive Command Center for Directorate Leadership and Operations Staff |
+| **Empanelled Bank Client Desk** | [http://localhost:3001/login?portal=client](http://localhost:3001/login?portal=client) | Restricted portal for Bank Nodal Recovery Desks |
+| **Platform Command Center** | [http://localhost:3001/admin](http://localhost:3001/admin) | System administration, personnel onboarding & statutory audit trails |
 | **Backend REST API** | [http://localhost:4000/api/v1](http://localhost:4000/api/v1) | Authenticated REST API & cryptographic audit engine |
 
 ---
 
-## 🔑 Demo Personas & Credentials
+## 🔑 Demonstration Personas & RBAC Tiers
 
-All seeded accounts use the universal demonstration password: **`PanaceaSecure2026!#`**
+All pre-configured testing accounts use the universal demonstration password: **`PanaceaSecure2026!#`**
 
-| Role / Title | Persona Name | Organization | Email | Password |
-| :--- | :--- | :--- | :--- | :--- |
-| **Managing Director** | Mr. Prashant Kumar | Panacea Consultancy Pvt Ltd | `prashant.kumar@panaceaconsultancy.com` | `PanaceaSecure2026!#` |
-| **Director — Operations** | Mrs. Anjana Singh | Panacea Consultancy Pvt Ltd | `anjana.singh@panaceaconsultancy.com` | `PanaceaSecure2026!#` |
-| **Systems Administrator** | Systems Administrator | Panacea Consultancy Pvt Ltd | `admin@panaceaconsultancy.in` | `PanaceaSecure2026!#` |
-| **Legal Recovery Lead** | Adv. Rajesh Verma | Panacea Consultancy Pvt Ltd | `legal.officer@panaceaconsultancy.in` | `PanaceaSecure2026!#` |
-| **Chief Investigator** | Suresh Pandey | Panacea Consultancy Pvt Ltd | `investigation@panaceaconsultancy.in` | `PanaceaSecure2026!#` |
-| **ICICI Bank Nodal Desk** | ICICI SAMG Patna Desk | ICICI Bank Limited | `nodal.officer@icicibank.com` | `PanaceaSecure2026!#` |
-| **Axis Bank Recovery Desk**| Axis Dhanbad Desk | Axis Bank Limited | `recovery.desk@axisbank.com` | `PanaceaSecure2026!#` |
+| Role / Title | RBAC Tier | Access Scope | Login Method |
+| :--- | :--- | :--- | :--- |
+| **Managing Director** | `platform_super_admin` | Full cross-bank portfolio oversight, system governance, and legal mandate authority | Click persona button on `/admin/login` |
+| **Director — Operations** | `operations_admin` | Field operations oversight, officer assignments, and statutory enforcement management | Click persona button on `/admin/login` |
+| **Systems Administrator** | `platform_super_admin` | Tenant configuration, security audit logs, and account lifecycle management | Click persona button on `/admin/login` |
+| **Legal Recovery Lead** | `panacea_legal_recovery_user` | Section 13(2) notices, Section 14 DM court petitions, and affidavits | Click persona button on `/login` (Staff tab) |
+| **Chief Investigator** | `panacea_investigation_user` | Asset verification, title tracing, and borrower fraud investigation | Click persona button on `/login` (Staff tab) |
+| **Bank Nodal Officer (Bank 1)**| `institutional_client_admin` | Strictly scoped to Bank 1 recovery dockets; BOLA isolated | Click persona button on `/login` (Client tab) |
+| **Bank Recovery Desk (Bank 2)** | `institutional_client_user` | Strictly scoped to Bank 2 recovery dockets; BOLA isolated | Click persona button on `/login` (Client tab) |
 
-*(Note: On both `/login` and `/admin/login`, one-click persona switcher buttons automatically autofill credentials for instant testing).*
+*(Note: On both the unified login page and the dedicated Admin Gateway, one-click persona switcher buttons automatically autofill credentials for instant testing).*
 
 ---
 
@@ -238,8 +233,8 @@ pnpm.cmd --filter @panacea/api test
 - `[PASS]` Rejects unauthenticated requests with 401
 - `[PASS]` Rejects forged or invalid session tokens with 401
 - `[PASS]` Prevents error disclosure and stack trace leakage
-- `[PASS]` Enforces multi-tenant BOLA isolation (ICICI cannot query Axis Bank cases)
-- `[PASS]` Permits authorized cross-tenant oversight for Panacea Director personas
+- `[PASS]` Enforces multi-tenant BOLA isolation (cross-tenant queries strictly forbidden)
+- `[PASS]` Permits authorized cross-tenant oversight for Director personas
 - `[PASS]` Prevents illegal status skips in the SARFAESI state machine
 - `[PASS]` Allows authorized sequential state progression
 - `[PASS]` Validates file MIME types and inspects binary magic bytes
@@ -266,13 +261,13 @@ To build production Docker containers with multi-stage builds and non-root users
 
 ```bash
 # 1. Build API Container
-docker build -f apps/api/Dockerfile -t panacea-api:latest .
+docker build -f apps/api/Dockerfile -t platform-api:latest .
 
 # 2. Build Web Application Container
-docker build -f apps/web/Dockerfile -t panacea-web:latest .
+docker build -f apps/web/Dockerfile -t platform-web:latest .
 
 # 3. Build Portal Application Container
-docker build -f apps/portal/Dockerfile -t panacea-portal:latest .
+docker build -f apps/portal/Dockerfile -t platform-portal:latest .
 ```
 
 For full production server setup, Nginx reverse proxy configuration, and SSL instructions, refer to [`docs/DEPLOYMENT.md`](file:///e:/Panacea/docs/DEPLOYMENT.md).
@@ -282,7 +277,7 @@ For full production server setup, Nginx reverse proxy configuration, and SSL ins
 ## 🛡️ Security Hardening & Controls
 
 1. **Multi-Tenant Isolation & BOLA/IDOR Prevention:**
-   - Strict database-level and middleware tenant scoping (`requireTenantAccess`). Client organizations (e.g., ICICI Bank, Axis Bank) can never enumerate or access cross-tenant dockets or documents.
+   - Strict database-level and middleware tenant scoping (`requireTenantAccess`). Client organizations can never enumerate or access cross-tenant dockets or documents.
 2. **Deterministic State Machine Enforcement:**
    - Case progress follows an unskippable sequence: `intake` → `demand_notice_served` → `possession_notice_issued` → `sec14_application_filed` → `dm_order_obtained` → `possession_taken` → `auction_scheduled` → `resolved`.
 3. **MIME & Magic-Byte Document Protection:**
@@ -300,4 +295,4 @@ For full production server setup, Nginx reverse proxy configuration, and SSL ins
 
 ## ⚖️ Legal & Compliance Disclaimer
 
-Panacea Consultancy Private Limited is a specialized enforcement agency and corporate consultancy firm acting strictly on written instructions, legal authorizations, and valid empanelment mandates issued by secured creditor banks and financial institutions. Panacea Consultancy does not act as a court or tribunal, does not originate independent lending recovery actions without creditor mandate, and operates in adherence with the SARFAESI Act, 2002, Security Interest (Enforcement) Rules, 2002, and all applicable High Court and Supreme Court guidelines.
+This platform operates as a specialized enforcement and corporate consultancy system acting strictly on written instructions, legal authorizations, and valid empanelment mandates issued by secured creditor banks and financial institutions. The platform does not act as a court or tribunal, does not originate independent lending recovery actions without creditor mandate, and operates in strict adherence with the SARFAESI Act, 2002, Security Interest (Enforcement) Rules, 2002, and applicable judicial guidelines.
