@@ -7,7 +7,8 @@
  * 3. Double-Submit CSRF protection on mutating HTTP requests (X-CSRF-Token header)
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
+export const API_ORIGIN = API_BASE_URL.replace(/\/api\/v1\/?$/, '');
 
 export interface ApiResponse<T> {
   data?: T;
@@ -32,8 +33,9 @@ export async function apiFetch<T>(
   endpoint: string,
   options: RequestInit = {},
 ): Promise<ApiResponse<T>> {
+  const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
   const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
+    ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
     ...(options.headers as Record<string, string>),
   };
 

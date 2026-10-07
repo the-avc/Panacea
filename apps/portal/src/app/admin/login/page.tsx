@@ -33,6 +33,9 @@ export default function AdminLoginPage() {
 
     if (res.mfaRequired) {
       setShowMfa(true);
+      if (process.env.NODE_ENV !== 'production' && !mfaCode) {
+        setMfaCode('000000');
+      }
       return;
     }
 
@@ -45,9 +48,27 @@ export default function AdminLoginPage() {
 
   const handleSelectAdmin = (userEmail: string) => {
     setEmail(userEmail);
-    setPassword('');
+    setPassword('Panacea#DevTest2026');
     setErrorMessage('');
     setShowMfa(false);
+    setMfaCode('000000');
+  };
+
+  const handleInstantLogin = async (userEmail: string) => {
+    setEmail(userEmail);
+    setPassword('Panacea#DevTest2026');
+    setMfaCode('000000');
+    setErrorMessage('');
+    setSubmitting(true);
+
+    const res = await login(userEmail, 'Panacea#DevTest2026', '000000');
+    setSubmitting(false);
+
+    if (res.success) {
+      router.push('/admin');
+    } else {
+      setErrorMessage(res.error || 'Directorate authentication failed. Please verify credentials.');
+    }
   };
 
   return (
@@ -156,69 +177,127 @@ export default function AdminLoginPage() {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
                   One-Click Director & Leadership Personas (DEV ONLY)
                 </span>
-                <span className="text-[10px] text-gray-400 font-mono">Privileged Directorate</span>
+                <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-mono font-bold">
+                  Dev/Test Active
+                </span>
               </div>
 
-              <div className="grid grid-cols-1 gap-1.5 text-left">
+              <div className="mb-3 p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-[11px] flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <span className="font-bold">⚡ Universal Dev Password: </span>
+                  <code className="bg-amber-100/80 px-1 py-0.5 rounded font-mono font-bold text-amber-950">Panacea#DevTest2026</code>
+                  <span className="mx-1.5 text-amber-400">·</span>
+                  <span className="font-bold">MFA TOTP: </span>
+                  <code className="bg-amber-100/80 px-1 py-0.5 rounded font-mono font-bold text-amber-950">000000</code>
+                </div>
                 <button
                   type="button"
-                  onClick={() => handleSelectAdmin('prashant.kumar@panaceaconsultancy.com')}
-                  className={`p-2.5 rounded border text-left text-[11px] transition-colors ${
+                  onClick={() => {
+                    setPassword('Panacea#DevTest2026');
+                    setMfaCode('000000');
+                  }}
+                  className="px-2 py-1 rounded bg-amber-200 hover:bg-amber-300 font-bold text-[10px] text-amber-950 transition-colors"
+                >
+                  ⚡ Auto-Fill Password & MFA
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 gap-2 text-left">
+                <div
+                  className={`p-3 rounded-lg border text-left text-[11px] transition-colors flex items-center justify-between gap-3 ${
                     email === 'prashant.kumar@panaceaconsultancy.com'
-                      ? 'border-burgundy-800 bg-burgundy-50 font-semibold'
+                      ? 'border-burgundy-800 bg-burgundy-50'
                       : 'border-gray-200 hover:bg-gray-50'
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-burgundy-950">Mr. Prashant Kumar</span>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-burgundy-100 text-burgundy-800 font-bold uppercase">
-                      Managing Director
+                  <button
+                    type="button"
+                    onClick={() => handleSelectAdmin('prashant.kumar@panaceaconsultancy.com')}
+                    className="flex-1 text-left"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-burgundy-950">Mr. Prashant Kumar</span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-burgundy-100 text-burgundy-800 font-bold uppercase">
+                        Managing Director
+                      </span>
+                    </div>
+                    <span className="text-gray-500 text-[10px] block mt-0.5">
+                      Platform Super Admin · Cross-Bank Portfolio Oversight
                     </span>
-                  </div>
-                  <span className="text-gray-500 text-[10px] block mt-0.5">
-                    Platform Super Admin · Cross-Bank Portfolio Oversight
-                  </span>
-                </button>
+                  </button>
+                  <button
+                    type="button"
+                    disabled={submitting}
+                    onClick={() => handleInstantLogin('prashant.kumar@panaceaconsultancy.com')}
+                    className="px-2.5 py-1.5 rounded bg-burgundy-900 hover:bg-burgundy-800 text-gold-400 font-bold text-[10px] whitespace-nowrap shadow-sm disabled:opacity-50"
+                  >
+                    ⚡ Quick Sign In
+                  </button>
+                </div>
 
-                <button
-                  type="button"
-                  onClick={() => handleSelectAdmin('anjana.singh@panaceaconsultancy.com')}
-                  className={`p-2.5 rounded border text-left text-[11px] transition-colors ${
+                <div
+                  className={`p-3 rounded-lg border text-left text-[11px] transition-colors flex items-center justify-between gap-3 ${
                     email === 'anjana.singh@panaceaconsultancy.com'
-                      ? 'border-burgundy-800 bg-burgundy-50 font-semibold'
+                      ? 'border-burgundy-800 bg-burgundy-50'
                       : 'border-gray-200 hover:bg-gray-50'
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-burgundy-950">Mrs. Anjana Singh</span>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-burgundy-100 text-burgundy-800 font-bold uppercase">
-                      Director — Operations
+                  <button
+                    type="button"
+                    onClick={() => handleSelectAdmin('anjana.singh@panaceaconsultancy.com')}
+                    className="flex-1 text-left"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-burgundy-950">Mrs. Anjana Singh</span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-burgundy-100 text-burgundy-800 font-bold uppercase">
+                        Director — Operations
+                      </span>
+                    </div>
+                    <span className="text-gray-500 text-[10px] block mt-0.5">
+                      Enforcement Administration · Field Operations Oversight
                     </span>
-                  </div>
-                  <span className="text-gray-500 text-[10px] block mt-0.5">
-                    Enforcement Administration · Field Operations Oversight
-                  </span>
-                </button>
+                  </button>
+                  <button
+                    type="button"
+                    disabled={submitting}
+                    onClick={() => handleInstantLogin('anjana.singh@panaceaconsultancy.com')}
+                    className="px-2.5 py-1.5 rounded bg-burgundy-900 hover:bg-burgundy-800 text-gold-400 font-bold text-[10px] whitespace-nowrap shadow-sm disabled:opacity-50"
+                  >
+                    ⚡ Quick Sign In
+                  </button>
+                </div>
 
-                <button
-                  type="button"
-                  onClick={() => handleSelectAdmin('admin@panaceaconsultancy.in')}
-                  className={`p-2.5 rounded border text-left text-[11px] transition-colors ${
+                <div
+                  className={`p-3 rounded-lg border text-left text-[11px] transition-colors flex items-center justify-between gap-3 ${
                     email === 'admin@panaceaconsultancy.in'
-                      ? 'border-burgundy-800 bg-burgundy-50 font-semibold'
+                      ? 'border-burgundy-800 bg-burgundy-50'
                       : 'border-gray-200 hover:bg-gray-50'
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-navy-950">Systems Administrator</span>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-navy-100 text-navy-800 font-bold uppercase">
-                      Super Admin
+                  <button
+                    type="button"
+                    onClick={() => handleSelectAdmin('admin@panaceaconsultancy.in')}
+                    className="flex-1 text-left"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-navy-950">Systems Administrator</span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-navy-100 text-navy-800 font-bold uppercase">
+                        Super Admin
+                      </span>
+                    </div>
+                    <span className="text-gray-500 text-[10px] block mt-0.5">
+                      Tenant Management, User Provisioning, System Audits
                     </span>
-                  </div>
-                  <span className="text-gray-500 text-[10px] block mt-0.5">
-                    Tenant Management, User Provisioning, System Audits
-                  </span>
-                </button>
+                  </button>
+                  <button
+                    type="button"
+                    disabled={submitting}
+                    onClick={() => handleInstantLogin('admin@panaceaconsultancy.in')}
+                    className="px-2.5 py-1.5 rounded bg-navy-900 hover:bg-navy-800 text-white font-bold text-[10px] whitespace-nowrap shadow-sm disabled:opacity-50"
+                  >
+                    ⚡ Quick Sign In
+                  </button>
+                </div>
               </div>
             </div>
           )}

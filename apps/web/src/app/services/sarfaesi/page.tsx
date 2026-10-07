@@ -9,6 +9,8 @@ export const metadata: Metadata = {
 };
 
 export default function SarfaesiPage() {
+  const portalBase = process.env.NEXT_PUBLIC_PORTAL_URL || 'http://localhost:3001';
+
   return (
     <div className="w-full">
       {/* Header */}
@@ -55,71 +57,121 @@ export default function SarfaesiPage() {
           <div className="space-y-8">
             {/* Stage 1 */}
             <div className="p-8 rounded-xl border border-gray-200 bg-[#fbfcfd]">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-900 text-gold-400 font-bold text-xs">
-                  1
-                </span>
-                <h3 className="font-display text-xl font-bold text-navy-950">
-                  Section 13(2) Demand Notice Drafting & Proof of Service
-                </h3>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-900 text-gold-400 font-bold text-xs">
+                    1
+                  </span>
+                  <h3 className="font-display text-xl font-bold text-navy-950">
+                    Section 13(2) Demand Notice Drafting & Proof of Service
+                  </h3>
+                </div>
+                <Link
+                  href="/services/sarfaesi/notice-13-2"
+                  className="text-xs font-semibold text-burgundy-700 hover:text-burgundy-900 hidden sm:inline-flex items-center gap-1"
+                >
+                  <span>Detailed Workflow →</span>
+                </Link>
               </div>
-              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-4xl">
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-4xl mb-4">
                 Preparation of precise 60-day demand notices under Section 13(2). We verify security
                 interest details, outstanding dues, asset descriptions matching the mortgage deed,
                 and borrower/guarantor identifications. Multi-channel dispatch via registered post
                 with acknowledgement due (RPAD), speed post, and physical affixture with photographic
                 dockets and newspaper publication management where required.
               </p>
+              <Link
+                href="/services/sarfaesi/notice-13-2"
+                className="text-xs font-semibold text-burgundy-700 hover:text-burgundy-900 sm:hidden inline-flex items-center gap-1"
+              >
+                <span>Detailed Workflow →</span>
+              </Link>
             </div>
 
             {/* Stage 2 */}
             <div className="p-8 rounded-xl border border-gray-200 bg-[#fbfcfd]">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-900 text-gold-400 font-bold text-xs">
-                  2
-                </span>
-                <h3 className="font-display text-xl font-bold text-navy-950">
-                  Section 14 Petition Drafting, Verification & Filing
-                </h3>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-900 text-gold-400 font-bold text-xs">
+                    2
+                  </span>
+                  <h3 className="font-display text-xl font-bold text-navy-950">
+                    Section 14 Petition Drafting, Verification & Filing
+                  </h3>
+                </div>
+                <Link
+                  href="/services/sarfaesi/section-14"
+                  className="text-xs font-semibold text-burgundy-700 hover:text-burgundy-900 hidden sm:inline-flex items-center gap-1"
+                >
+                  <span>Section 14 Details →</span>
+                </Link>
               </div>
-              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-4xl">
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-4xl mb-4">
                 Upon expiry of the statutory 60-day notice period without borrower satisfaction, our
                 team drafts the formal application u/s 14 before the District Magistrate (DM) or Chief
                 Metropolitan Magistrate (CMM). Includes drafting the mandatory 9-point affidavit
                 conforming to the 2013 SARFAESI amendment, verifying compliance certificates, and
                 docket submission before the appropriate collectorate.
               </p>
+              <Link
+                href="/services/sarfaesi/section-14"
+                className="text-xs font-semibold text-burgundy-700 hover:text-burgundy-900 sm:hidden inline-flex items-center gap-1"
+              >
+                <span>Section 14 Details →</span>
+              </Link>
             </div>
 
             {/* Stage 3 */}
             <div className="p-8 rounded-xl border border-gray-200 bg-[#fbfcfd]">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-900 text-gold-400 font-bold text-xs">
-                  3
-                </span>
-                <h3 className="font-display text-xl font-bold text-navy-950">
-                  Section 14 Order Tracking & Obtaining
-                </h3>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-900 text-gold-400 font-bold text-xs">
+                    3
+                  </span>
+                  <h3 className="font-display text-xl font-bold text-navy-950">
+                    Section 14 Order Tracking & Obtaining
+                  </h3>
+                </div>
+                <Link
+                  href="/services/sarfaesi/section-14"
+                  className="text-xs font-semibold text-burgundy-700 hover:text-burgundy-900 hidden sm:inline-flex items-center gap-1"
+                >
+                  <span>Order Procurement →</span>
+                </Link>
               </div>
-              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-4xl">
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-4xl mb-4">
                 Active administrative follow-up with the magistracy and revenue departments across
                 districts in Bihar, Jharkhand, and Chhattisgarh. Resolving administrative queries,
                 coordinating hearing dates, and securing certified orders directing police and
                 executive magistrates to take physical possession of the mortgaged asset.
               </p>
+              <Link
+                href="/services/sarfaesi/section-14"
+                className="text-xs font-semibold text-burgundy-700 hover:text-burgundy-900 sm:hidden inline-flex items-center gap-1"
+              >
+                <span>Order Procurement →</span>
+              </Link>
             </div>
 
             {/* Stage 4 */}
             <div className="p-8 rounded-xl border border-gray-200 bg-[#fbfcfd]">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-900 text-gold-400 font-bold text-xs">
-                  4
-                </span>
-                <h3 className="font-display text-xl font-bold text-navy-950">
-                  Execution of Section 14 Orders & Physical Possession Handover
-                </h3>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-900 text-gold-400 font-bold text-xs">
+                    4
+                  </span>
+                  <h3 className="font-display text-xl font-bold text-navy-950">
+                    Execution of Section 14 Orders & Physical Possession Handover
+                  </h3>
+                </div>
+                <Link
+                  href="/services/sarfaesi/possession-execution"
+                  className="text-xs font-semibold text-burgundy-700 hover:text-burgundy-900 hidden sm:inline-flex items-center gap-1"
+                >
+                  <span>Execution Procedures →</span>
+                </Link>
               </div>
-              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-4xl">
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-4xl mb-4">
                 On-site execution alongside deputed Executive Magistrates, Circle Officers, Court
                 Receivers, and local police forces. Execution includes: comprehensive video
                 recording, panchnama documentation, inventory listing of all movable goods, lawful
@@ -127,6 +179,12 @@ export default function SarfaesiPage() {
                 security personnel, and formal physical handover of possession to the Authorised
                 Officer of the client bank.
               </p>
+              <Link
+                href="/services/sarfaesi/possession-execution"
+                className="text-xs font-semibold text-burgundy-700 hover:text-burgundy-900 sm:hidden inline-flex items-center gap-1"
+              >
+                <span>Execution Procedures →</span>
+              </Link>
             </div>
           </div>
         </div>
@@ -144,7 +202,7 @@ export default function SarfaesiPage() {
             </p>
           </div>
           <a
-            href="http://localhost:3001"
+            href={portalBase}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-md bg-gold-500 hover:bg-gold-600 px-5 py-2.5 text-xs font-semibold text-navy-950 shrink-0"

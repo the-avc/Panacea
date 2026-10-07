@@ -43,6 +43,9 @@ function LoginFormContent() {
 
     if (res.mfaRequired) {
       setShowMfa(true);
+      if (process.env.NODE_ENV !== 'production' && !mfaCode) {
+        setMfaCode('000000');
+      }
       return;
     }
 
@@ -55,9 +58,27 @@ function LoginFormContent() {
 
   const handleSelectDemoUser = (userEmail: string) => {
     setEmail(userEmail);
-    setPassword('');
+    setPassword('Panacea#DevTest2026');
     setErrorMessage('');
     setShowMfa(false);
+    setMfaCode('000000');
+  };
+
+  const handleInstantLogin = async (userEmail: string) => {
+    setEmail(userEmail);
+    setPassword('Panacea#DevTest2026');
+    setMfaCode('000000');
+    setErrorMessage('');
+    setSubmitting(true);
+
+    const res = await login(userEmail, 'Panacea#DevTest2026', '000000');
+    setSubmitting(false);
+
+    if (res.success) {
+      router.push('/dashboard');
+    } else {
+      setErrorMessage(res.error || 'Authentication failed. Please verify credentials.');
+    }
   };
 
   return (
@@ -209,15 +230,36 @@ function LoginFormContent() {
                     ? 'Fast-Switch Company & Director Personas'
                     : 'Fast-Switch Bank Client Personas'}
                 </span>
-                <span className="text-[10px] text-gray-400 font-mono">Development Mode</span>
+                <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-mono font-bold">
+                  Dev/Test Active
+                </span>
+              </div>
+
+              <div className="mb-3 p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-[11px] flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <span className="font-bold">⚡ Universal Dev Password: </span>
+                  <code className="bg-amber-100/80 px-1 py-0.5 rounded font-mono font-bold text-amber-950">Panacea#DevTest2026</code>
+                  <span className="mx-1.5 text-amber-400">·</span>
+                  <span className="font-bold">MFA TOTP: </span>
+                  <code className="bg-amber-100/80 px-1 py-0.5 rounded font-mono font-bold text-amber-950">000000</code>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPassword('Panacea#DevTest2026');
+                    setMfaCode('000000');
+                  }}
+                  className="px-2 py-1 rounded bg-amber-200 hover:bg-amber-300 font-bold text-[10px] text-amber-950 transition-colors"
+                >
+                  ⚡ Auto-Fill Password & MFA
+                </button>
               </div>
 
               {activeTab === 'staff' ? (
                 <div className="grid grid-cols-1 gap-1.5 text-left">
-                  <button
-                    type="button"
+                  <div
                     onClick={() => handleSelectDemoUser('prashant.kumar@panaceaconsultancy.com')}
-                    className={`p-2 rounded border text-left text-[11px] transition-colors ${
+                    className={`p-2 rounded border text-left text-[11px] transition-colors cursor-pointer ${
                       email === 'prashant.kumar@panaceaconsultancy.com'
                         ? 'border-burgundy-800 bg-burgundy-50 font-semibold'
                         : 'border-gray-200 hover:bg-gray-50'
@@ -225,19 +267,30 @@ function LoginFormContent() {
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-burgundy-950">Mr. Prashant Kumar</span>
-                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-burgundy-100 text-burgundy-800 font-bold uppercase">
-                        Managing Director
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-burgundy-100 text-burgundy-800 font-bold uppercase">
+                          Managing Director
+                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleInstantLogin('prashant.kumar@panaceaconsultancy.com');
+                          }}
+                          className="text-[10px] bg-gold-400 hover:bg-gold-500 text-navy-950 font-bold px-2 py-0.5 rounded shadow-sm"
+                        >
+                          ⚡ Quick Sign In
+                        </button>
+                      </div>
                     </div>
                     <span className="text-gray-500 text-[10px] block mt-0.5">
                       Lead Strategist & Executive Platform Super Admin
                     </span>
-                  </button>
+                  </div>
 
-                  <button
-                    type="button"
+                  <div
                     onClick={() => handleSelectDemoUser('anjana.singh@panaceaconsultancy.com')}
-                    className={`p-2 rounded border text-left text-[11px] transition-colors ${
+                    className={`p-2 rounded border text-left text-[11px] transition-colors cursor-pointer ${
                       email === 'anjana.singh@panaceaconsultancy.com'
                         ? 'border-burgundy-800 bg-burgundy-50 font-semibold'
                         : 'border-gray-200 hover:bg-gray-50'
@@ -245,19 +298,30 @@ function LoginFormContent() {
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-burgundy-950">Mrs. Anjana Singh</span>
-                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-burgundy-100 text-burgundy-800 font-bold uppercase">
-                        Director — Operations
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-burgundy-100 text-burgundy-800 font-bold uppercase">
+                          Director — Operations
+                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleInstantLogin('anjana.singh@panaceaconsultancy.com');
+                          }}
+                          className="text-[10px] bg-gold-400 hover:bg-gold-500 text-navy-950 font-bold px-2 py-0.5 rounded shadow-sm"
+                        >
+                          ⚡ Quick Sign In
+                        </button>
+                      </div>
                     </div>
                     <span className="text-gray-500 text-[10px] block mt-0.5">
                       Field Enforcement Oversight & Institutional Case Management
                     </span>
-                  </button>
+                  </div>
 
-                  <button
-                    type="button"
+                  <div
                     onClick={() => handleSelectDemoUser('legal.officer@panaceaconsultancy.in')}
-                    className={`p-2 rounded border text-left text-[11px] transition-colors ${
+                    className={`p-2 rounded border text-left text-[11px] transition-colors cursor-pointer ${
                       email === 'legal.officer@panaceaconsultancy.in'
                         ? 'border-navy-800 bg-navy-50 font-semibold'
                         : 'border-gray-200 hover:bg-gray-50'
@@ -265,19 +329,30 @@ function LoginFormContent() {
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-navy-950">Adv. Rajesh Verma</span>
-                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-navy-100 text-navy-800 font-bold uppercase">
-                        Legal Recovery Lead
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-navy-100 text-navy-800 font-bold uppercase">
+                          Legal Recovery Lead
+                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleInstantLogin('legal.officer@panaceaconsultancy.in');
+                          }}
+                          className="text-[10px] bg-navy-950 hover:bg-navy-900 text-white font-bold px-2 py-0.5 rounded shadow-sm"
+                        >
+                          ⚡ Quick Sign In
+                        </button>
+                      </div>
                     </div>
                     <span className="text-gray-500 text-[10px] block mt-0.5">
                       SARFAESI Sec 13(2), Sec 14 Petitions & DM Court Liaison
                     </span>
-                  </button>
+                  </div>
 
-                  <button
-                    type="button"
+                  <div
                     onClick={() => handleSelectDemoUser('investigation@panaceaconsultancy.in')}
-                    className={`p-2 rounded border text-left text-[11px] transition-colors ${
+                    className={`p-2 rounded border text-left text-[11px] transition-colors cursor-pointer ${
                       email === 'investigation@panaceaconsultancy.in'
                         ? 'border-navy-800 bg-navy-50 font-semibold'
                         : 'border-gray-200 hover:bg-gray-50'
@@ -285,21 +360,32 @@ function LoginFormContent() {
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-navy-950">Suresh Pandey</span>
-                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-navy-100 text-navy-800 font-bold uppercase">
-                        Chief Investigator
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-navy-100 text-navy-800 font-bold uppercase">
+                          Chief Investigator
+                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleInstantLogin('investigation@panaceaconsultancy.in');
+                          }}
+                          className="text-[10px] bg-navy-950 hover:bg-navy-900 text-white font-bold px-2 py-0.5 rounded shadow-sm"
+                        >
+                          ⚡ Quick Sign In
+                        </button>
+                      </div>
                     </div>
                     <span className="text-gray-500 text-[10px] block mt-0.5">
                       Asset Verification, Title Tracing & Fraud Detection Lead
                     </span>
-                  </button>
+                  </div>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 gap-1.5 text-left">
-                  <button
-                    type="button"
+                  <div
                     onClick={() => handleSelectDemoUser('nodal.officer@icicibank.com')}
-                    className={`p-2 rounded border text-left text-[11px] transition-colors ${
+                    className={`p-2 rounded border text-left text-[11px] transition-colors cursor-pointer ${
                       email === 'nodal.officer@icicibank.com'
                         ? 'border-navy-800 bg-navy-50 font-semibold'
                         : 'border-gray-200 hover:bg-gray-50'
@@ -307,19 +393,30 @@ function LoginFormContent() {
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-navy-950">ICICI Bank Limited</span>
-                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 font-bold uppercase">
-                        SAMG Patna Nodal Desk
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 font-bold uppercase">
+                          SAMG Patna Nodal
+                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleInstantLogin('nodal.officer@icicibank.com');
+                          }}
+                          className="text-[10px] bg-blue-600 hover:bg-blue-700 text-white font-bold px-2 py-0.5 rounded shadow-sm"
+                        >
+                          ⚡ Quick Sign In
+                        </button>
+                      </div>
                     </div>
                     <span className="text-gray-500 text-[10px] block mt-0.5">
                       Secured Creditor Mandate — Amitabh Sen
                     </span>
-                  </button>
+                  </div>
 
-                  <button
-                    type="button"
+                  <div
                     onClick={() => handleSelectDemoUser('recovery.desk@axisbank.com')}
-                    className={`p-2 rounded border text-left text-[11px] transition-colors ${
+                    className={`p-2 rounded border text-left text-[11px] transition-colors cursor-pointer ${
                       email === 'recovery.desk@axisbank.com'
                         ? 'border-navy-800 bg-navy-50 font-semibold'
                         : 'border-gray-200 hover:bg-gray-50'
@@ -327,14 +424,26 @@ function LoginFormContent() {
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-navy-950">Axis Bank Limited</span>
-                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 font-bold uppercase">
-                        Recovery Desk Dhanbad
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 font-bold uppercase">
+                          Recovery Desk Dhanbad
+                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleInstantLogin('recovery.desk@axisbank.com');
+                          }}
+                          className="text-[10px] bg-purple-600 hover:bg-purple-700 text-white font-bold px-2 py-0.5 rounded shadow-sm"
+                        >
+                          ⚡ Quick Sign In
+                        </button>
+                      </div>
                     </div>
                     <span className="text-gray-500 text-[10px] block mt-0.5">
                       Secured Creditor Mandate — Priya Sharma
                     </span>
-                  </button>
+                  </div>
                 </div>
               )}
             </div>

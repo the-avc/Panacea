@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 
 export default function ContactPage() {
+  const portalBase = process.env.NEXT_PUBLIC_PORTAL_URL || 'http://localhost:3001';
+
   const [formData, setFormData] = useState({
     institutionName: '',
     officerName: '',
@@ -95,6 +97,12 @@ export default function ContactPage() {
                     </p>
                     <p className="flex items-center gap-2">
                       <span className="text-xs text-gray-500 font-sans">Desk 2:</span>
+                      <a href="tel:+917870657256" className="hover:text-burgundy-700 font-semibold">
+                        +91-7870657256
+                      </a>
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <span className="text-xs text-gray-500 font-sans">Desk 3:</span>
                       <a href="tel:+919431432983" className="hover:text-burgundy-700 font-semibold">
                         +91-9431432983
                       </a>
@@ -102,6 +110,24 @@ export default function ContactPage() {
                   </div>
                   <p className="mt-1 text-[11px] text-gray-500">
                     Available during statutory court and administrative hours.
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-gray-200">
+                  <h4 className="text-xs font-bold text-navy-950 uppercase tracking-wide">
+                    Operational & Branch Office
+                  </h4>
+                  <p className="mt-1 text-xs text-gray-700 leading-relaxed">
+                    311-C, 3rd Floor, Ashiana Galaxy, Opp. Hotel Lemon Tree, Exhibition Road, Patna - 800 001
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-gray-200">
+                  <h4 className="text-xs font-bold text-navy-950 uppercase tracking-wide">
+                    Registered Office
+                  </h4>
+                  <p className="mt-1 text-xs text-gray-700 leading-relaxed">
+                    1 Van Vihar, Gali No.-2, Beside Ramawtar Apartment, Near Paras Nath Garden, Ashiana Nagar, Patna - 800 025
                   </p>
                 </div>
 
@@ -132,7 +158,7 @@ export default function ContactPage() {
                 through this public contact form. Active docket updates and certified order downloads
                 must be conducted through the authenticated{' '}
                 <a
-                  href="http://localhost:3001"
+                  href={portalBase}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-bold text-burgundy-700 underline"

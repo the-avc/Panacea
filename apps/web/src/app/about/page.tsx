@@ -102,6 +102,89 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Official Mission & Objectives (Directly from Corporate Profile) */}
+      <section className="py-16 bg-navy-50/50 border-t border-gray-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            <div className="lg:col-span-6">
+              <span className="text-xs font-bold uppercase tracking-widest text-burgundy-700">
+                Our Mission
+              </span>
+              <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-navy-950">
+                Transforming Debt Solutions & Protecting Client Equity
+              </h2>
+              <p className="mt-4 text-xs sm:text-sm text-gray-700 leading-relaxed">
+                Requirements for satisfying consumer needs, burdens of overdue debt, and the need for
+                effective customer retention throw up never-ending challenges for any business.
+              </p>
+              <p className="mt-3 text-xs sm:text-sm text-gray-700 leading-relaxed">
+                We believe in building long-lasting strategic relationships. We have sufficient experience
+                and expertise needed to establish a mutually beneficial relationship between clients and
+                their debtors whereby we assist our clients in recovering outstanding amounts owing by
+                implementing the most efficient means possible, taking away anxiety off debt recovery issues,
+                and allowing clients to focus on core business processes.
+              </p>
+              <div className="mt-6 p-4 rounded-xl border border-gold-500/30 bg-white text-xs text-navy-950">
+                <span className="font-bold text-burgundy-900 block mb-1 uppercase tracking-wider">
+                  Our Partnership Philosophy:
+                </span>
+                <em>
+                  “Momentum Movement Forward motion. It is what we have been doing since we started out, and
+                  it has been growing. Our client’s momentum feeds ours and we sustain theirs. It’s a
+                  partnership.”
+                </em>
+              </div>
+            </div>
+
+            <div className="lg:col-span-6">
+              <span className="text-xs font-bold uppercase tracking-widest text-burgundy-700">
+                Core Objectives
+              </span>
+              <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-navy-950">
+                Measurable Statutory Goals
+              </h2>
+              <div className="mt-6 space-y-3 text-xs sm:text-sm text-gray-700">
+                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200">
+                  <span className="text-gold-600 font-bold">✓</span>
+                  <span>
+                    <strong>Complete the process under SARFAESI Act</strong> in mortgage properties, from
+                    sending Section 13(2) notices to the auction of properties.
+                  </span>
+                </div>
+                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200">
+                  <span className="text-gold-600 font-bold">✓</span>
+                  <span>
+                    <strong>Arrange the Section 14 order</strong> within the shortest period of time through
+                    systematic magistracy follow-up.
+                  </span>
+                </div>
+                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200">
+                  <span className="text-gold-600 font-bold">✓</span>
+                  <span>
+                    <strong>Proven agency of choice</strong> for our institutional clients in terms of
+                    performance and results.
+                  </span>
+                </div>
+                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200">
+                  <span className="text-gold-600 font-bold">✓</span>
+                  <span>
+                    <strong>Strong relationships with key organizations</strong> in selected financial market
+                    segments across Bihar, Jharkhand, and Chhattisgarh.
+                  </span>
+                </div>
+                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200">
+                  <span className="text-gold-600 font-bold">✓</span>
+                  <span>
+                    <strong>An extension of our clients' business approach</strong> as an exclusive debt
+                    solutions and para-legal enforcement partner.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Regional Operational Boundaries */}
       <section className="py-16 bg-[#fbfcfd] border-t border-gray-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
