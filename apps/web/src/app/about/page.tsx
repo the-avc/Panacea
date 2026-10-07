@@ -108,75 +108,69 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             <div className="lg:col-span-6">
               <span className="text-xs font-bold uppercase tracking-widest text-burgundy-700">
-                Our Mission
+                Strategic Orientation
               </span>
               <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-navy-950">
-                Transforming Debt Solutions & Protecting Client Equity
+                Our Mission
               </h2>
-              <p className="mt-4 text-xs sm:text-sm text-gray-700 leading-relaxed">
-                Requirements for satisfying consumer needs, burdens of overdue debt, and the need for
-                effective customer retention throw up never-ending challenges for any business.
-              </p>
-              <p className="mt-3 text-xs sm:text-sm text-gray-700 leading-relaxed">
-                We believe in building long-lasting strategic relationships. We have sufficient experience
-                and expertise needed to establish a mutually beneficial relationship between clients and
-                their debtors whereby we assist our clients in recovering outstanding amounts owing by
-                implementing the most efficient means possible, taking away anxiety off debt recovery issues,
-                and allowing clients to focus on core business processes.
-              </p>
-              <div className="mt-6 p-4 rounded-xl border border-gold-500/30 bg-white text-xs text-navy-950">
+              <div className="mt-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm space-y-3 text-xs sm:text-sm text-gray-700 leading-relaxed">
+                <p>
+                  Requirements for satisfying consumer needs, burdens of overdue debt, and the need for effective customer retention etc., throw up never-ending challenges for any business.
+                </p>
+                <p>
+                  We believe in building long-lasting strategic relationship. We have sufficient experience and expertise needed establish a mutually beneficial relationship between clients and their debtors whereby we assist our clients in recovering outstanding amounts owing by implementing the most efficient means possible and take away your anxiety off issues regarding debt recovery and allow clients to focus on the core business processes and help them in transforming their business.
+                </p>
+              </div>
+
+              <div className="mt-6 p-4 rounded-xl border border-gold-400/40 bg-gold-50/60 text-xs text-navy-950">
                 <span className="font-bold text-burgundy-900 block mb-1 uppercase tracking-wider">
-                  Our Partnership Philosophy:
+                  Momentum & Partnership
                 </span>
-                <em>
-                  “Momentum Movement Forward motion. It is what we have been doing since we started out, and
-                  it has been growing. Our client’s momentum feeds ours and we sustain theirs. It’s a
-                  partnership.”
-                </em>
+                <p className="italic">
+                  “Momentum Movement Forward motion. It is what we have been doing since we started out, and it has been growing. Our client’s momentum feeds ours and we sustain theirs. It’s a partnership.”
+                </p>
               </div>
             </div>
 
             <div className="lg:col-span-6">
               <span className="text-xs font-bold uppercase tracking-widest text-burgundy-700">
-                Core Objectives
+                Operational Benchmarks
               </span>
               <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-navy-950">
-                Measurable Statutory Goals
+                Our Objectives
               </h2>
-              <div className="mt-6 space-y-3 text-xs sm:text-sm text-gray-700">
-                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200">
-                  <span className="text-gold-600 font-bold">✓</span>
+              <p className="mt-2 text-xs text-gray-500">
+                The 5 core operational benchmarks governing all enforcement assignments (verbatim from profile):
+              </p>
+              <div className="mt-4 space-y-3 text-xs sm:text-sm text-gray-700">
+                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200 shadow-sm">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-navy-900 text-gold-400 text-xs font-bold">1</span>
                   <span>
-                    <strong>Complete the process under SARFAESI Act</strong> in mortgage properties, from
-                    sending Section 13(2) notices to the auction of properties.
+                    To complete the process under SARFAESI Act in mortgage properties. (Sending 13(2) notice to Auction of properties.)
                   </span>
                 </div>
-                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200">
-                  <span className="text-gold-600 font-bold">✓</span>
+                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200 shadow-sm">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-navy-900 text-gold-400 text-xs font-bold">2</span>
                   <span>
-                    <strong>Arrange the Section 14 order</strong> within the shortest period of time through
-                    systematic magistracy follow-up.
+                    To arrange the Sec 14 order within the shortest period of time.
                   </span>
                 </div>
-                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200">
-                  <span className="text-gold-600 font-bold">✓</span>
+                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200 shadow-sm">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-navy-900 text-gold-400 text-xs font-bold">3</span>
                   <span>
-                    <strong>Proven agency of choice</strong> for our institutional clients in terms of
-                    performance and results.
+                    To be proven by our clients as the agency of choice in terms of performance and results.
                   </span>
                 </div>
-                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200">
-                  <span className="text-gold-600 font-bold">✓</span>
+                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200 shadow-sm">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-navy-900 text-gold-400 text-xs font-bold">4</span>
                   <span>
-                    <strong>Strong relationships with key organizations</strong> in selected financial market
-                    segments across Bihar, Jharkhand, and Chhattisgarh.
+                    To have strong relationships with key Organizations in selected market Segments.
                   </span>
                 </div>
-                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200">
-                  <span className="text-gold-600 font-bold">✓</span>
+                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200 shadow-sm">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-navy-900 text-gold-400 text-xs font-bold">5</span>
                   <span>
-                    <strong>An extension of our clients' business approach</strong> as an exclusive debt
-                    solutions and para-legal enforcement partner.
+                    To be an extension of overall our clients business approach and an exclusive Debt Solutions partner.
                   </span>
                 </div>
               </div>
