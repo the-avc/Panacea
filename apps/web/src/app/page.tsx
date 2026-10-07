@@ -17,22 +17,22 @@ export default function HomePage() {
             {/* Jurisdictional Badge */}
             <div className="inline-flex items-center gap-2 rounded-full border border-gold-500/30 bg-navy-900/80 px-3.5 py-1 text-xs font-semibold text-gold-300 backdrop-blur-md mb-6 shadow-sm">
               <span className="h-1.5 w-1.5 rounded-full bg-gold-400 animate-pulse" />
-              <span>Operating Territories: Bihar · Jharkhand · Chhattisgarh</span>
+              <span>Operating Jurisdictions: Bihar · Jharkhand · Chhattisgarh</span>
             </div>
 
             {/* Profile Headline */}
             <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-tight">
-              Panacea Consultancy Private Limited
+              Institutional Enforcement & Recovery Services
             </h1>
             <p className="mt-3 text-xs sm:text-sm uppercase tracking-widest text-gold-400 font-semibold">
               Enforcement and Investigation Related Ancillary Services
             </p>
 
-            {/* Verbatim Profile Narrative */}
-            <p className="mt-6 text-sm sm:text-base text-gray-300 leading-relaxed font-normal">
-              A private limited entity doing business in name and style of Panacea Consultancy Private Limited.
-              Engaged in Enforcement and Investigation related ancillary services under the SARFAESI Act, 2002
-              for leading banks, financial institutions, and asset reconstruction corporations.
+            {/* Subheading */}
+            <p className="mt-6 text-base sm:text-lg text-gray-300 leading-relaxed max-w-2xl font-normal">
+              Panacea Consultancy Private Limited provides specialized para-legal execution,
+              rigorous SARFAESI enforcement, Section 14 acquisition, asset verification, and
+              third-party investigations for leading financial institutions, banks, and NBFCs.
             </p>
 
             {/* CTA Buttons */}
