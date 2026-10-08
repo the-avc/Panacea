@@ -30,8 +30,9 @@ export default function Section14Page() {
               Section 14 Applications & Getting Orders
             </h1>
             <p className="mt-4 text-xs sm:text-sm text-gray-300 leading-relaxed">
-              Assisting financial institutions with filing Section 14 applications and obtaining orders before
-              District Magistrates and Chief Metropolitan Magistrates within the shortest period of time.
+              Assisting financial institutions with filing Section 14 applications and obtaining
+              orders before District Magistrates and Chief Metropolitan Magistrates within the
+              shortest period of time.
             </p>
           </div>
         </div>
@@ -48,7 +49,8 @@ export default function Section14Page() {
                   Core Mandate from Corporate Profile
                 </span>
                 <p className="italic text-gray-800">
-                  “The filing of Section 14 applications & Getting Orders... Our objective: To arrange the Sec 14 order within the shortest period of time.”
+                  “The filing of Section 14 applications & Getting Orders... Our objective: To
+                  arrange the Sec 14 order within the shortest period of time.”
                 </p>
               </div>
 
@@ -60,10 +62,12 @@ export default function Section14Page() {
                   Expedited Magisterial Petition Filing & Follow-Up
                 </h2>
                 <p className="mt-3 text-xs text-gray-600 leading-relaxed">
-                  When borrowers fail to satisfy the statutory 60-day demand under Section 13(2), Section 14 empowers
-                  secured creditors to request the assistance of the District Magistrate (DM) or Chief Metropolitan Magistrate
-                  (CMM) to take possession of the secured asset. Our dedicated team handles petition preparation,
-                  statutory affidavits, and continuous administrative liaison to obtain the certified order without delays.
+                  When borrowers fail to satisfy the statutory 60-day demand under Section 13(2),
+                  Section 14 empowers secured creditors to request the assistance of the District
+                  Magistrate (DM) or Chief Metropolitan Magistrate (CMM) to take possession of the
+                  secured asset. Our dedicated team handles petition preparation, statutory
+                  affidavits, and continuous administrative liaison to obtain the certified order
+                  without delays.
                 </p>
               </div>
 
@@ -75,8 +79,9 @@ export default function Section14Page() {
                     Petition & Affidavit Drafting
                   </h3>
                   <p className="text-xs text-gray-600 leading-relaxed">
-                    Prepared by personnel with a strong legal background, incorporating the mandatory statutory affidavit
-                    affirming loan default, security creation, and valid service of the Section 13(2) demand notice.
+                    Prepared by personnel with a strong legal background, incorporating the
+                    mandatory statutory affidavit affirming loan default, security creation, and
+                    valid service of the Section 13(2) demand notice.
                   </p>
                 </div>
 
@@ -86,8 +91,9 @@ export default function Section14Page() {
                     Collectorate / DM Office Filing
                   </h3>
                   <p className="text-xs text-gray-600 leading-relaxed">
-                    Formal filing before the competent District Magistrate across collectorates in Bihar, Jharkhand,
-                    and Chhattisgarh, ensuring full adherence to local administrative procedures.
+                    Formal filing before the competent District Magistrate across collectorates in
+                    Bihar, Jharkhand, and Chhattisgarh, ensuring full adherence to local
+                    administrative procedures.
                   </p>
                 </div>
 
@@ -97,8 +103,8 @@ export default function Section14Page() {
                     Order Procurement Within Shortest Period
                   </h3>
                   <p className="text-xs text-gray-600 leading-relaxed">
-                    Active case tracking and procedural follow-up to arrange the Section 14 order within the shortest
-                    period of time, minimizing delays in secured asset takeover.
+                    Active case tracking and procedural follow-up to arrange the Section 14 order
+                    within the shortest period of time, minimizing delays in secured asset takeover.
                   </p>
                 </div>
 
@@ -108,8 +114,9 @@ export default function Section14Page() {
                     Certified Copy Procurement
                   </h3>
                   <p className="text-xs text-gray-600 leading-relaxed">
-                    Securing certified copies of the magisterial order deputing the Executive Magistrate / Police Officers
-                    for execution, and transmitting the documents to the client portal vault.
+                    Securing certified copies of the magisterial order deputing the Executive
+                    Magistrate / Police Officers for execution, and transmitting the documents to
+                    the client portal vault.
                   </p>
                 </div>
               </div>
@@ -117,8 +124,8 @@ export default function Section14Page() {
               {/* Integrity Commitment */}
               <div className="p-5 rounded-xl border border-gray-200 bg-navy-50/50 text-xs text-gray-700 leading-relaxed">
                 <span className="font-bold text-navy-950 block mb-1">Standards of Integrity:</span>
-                “We at Panacea Consultancy Private Limited reflect our values and reinforce our commitment to the highest
-                standards of integrity and honesty in business.”
+                “We at Panacea Consultancy Private Limited reflect our values and reinforce our
+                commitment to the highest standards of integrity and honesty in business.”
               </div>
             </div>
 
@@ -132,9 +139,15 @@ export default function Section14Page() {
                   District Magistracies
                 </h4>
                 <div className="space-y-2 text-xs font-semibold text-navy-900">
-                  <div className="p-2.5 rounded bg-white border border-navy-100">State of Bihar (All District Magistracies)</div>
-                  <div className="p-2.5 rounded bg-white border border-navy-100">State of Jharkhand (All District Magistracies)</div>
-                  <div className="p-2.5 rounded bg-white border border-navy-100">State of Chhattisgarh (All District Magistracies)</div>
+                  <div className="p-2.5 rounded bg-white border border-navy-100">
+                    State of Bihar (All District Magistracies)
+                  </div>
+                  <div className="p-2.5 rounded bg-white border border-navy-100">
+                    State of Jharkhand (All District Magistracies)
+                  </div>
+                  <div className="p-2.5 rounded bg-white border border-navy-100">
+                    State of Chhattisgarh (All District Magistracies)
+                  </div>
                 </div>
               </div>
 
@@ -148,7 +161,10 @@ export default function Section14Page() {
                 <div className="space-y-2 text-xs text-gray-700 mb-4">
                   <div>
                     <span className="font-bold block text-navy-950">Email:</span>
-                    <a href="mailto:panaceaconsultancypvtltd@gmail.com" className="text-burgundy-800 font-semibold break-all">
+                    <a
+                      href="mailto:panaceaconsultancypvtltd@gmail.com"
+                      className="text-burgundy-800 font-semibold break-all"
+                    >
                       panaceaconsultancypvtltd@gmail.com
                     </a>
                   </div>
@@ -161,7 +177,7 @@ export default function Section14Page() {
                   href={`${portalBase}/login?portal=client`}
                   className="block w-full text-center rounded-md bg-navy-950 py-2.5 px-4 text-xs font-semibold text-white hover:bg-navy-900 transition-colors"
                 >
-                  Bank Client Portal Login →
+                  Client Portal Login →
                 </a>
               </div>
             </div>

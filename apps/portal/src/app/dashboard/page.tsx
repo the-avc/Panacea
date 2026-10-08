@@ -42,9 +42,9 @@ export default function DashboardPage() {
               }`}>
                 {isPanaceaStaff
                   ? isDirector
-                    ? '🏛️ Directorate Executive Oversight'
-                    : '🛡️ Panacea Enforcement Operations'
-                  : '🏦 Secured Creditor Client Desk'}
+                    ? 'Executive Directorate Oversight'
+                    : 'Panacea Enforcement Operations'
+                  : 'Secured Creditor Client Desk'}
               </span>
               <span className="text-xs text-gray-400">•</span>
               <span className={`text-xs ${isPanaceaStaff ? 'text-gray-300' : 'text-gray-500'}`}>
@@ -67,7 +67,9 @@ export default function DashboardPage() {
                 href="/cases"
                 className="rounded-md bg-gold-500 hover:bg-gold-400 active:bg-gold-600 px-3.5 py-2 text-xs font-bold text-navy-950 transition-colors shadow-sm flex items-center gap-1.5"
               >
-                <span>➕</span>
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
                 <span>Register New Mandate</span>
               </Link>
             )}
@@ -96,12 +98,16 @@ export default function DashboardPage() {
                 href="/cases"
                 className="p-3 rounded-lg border border-gray-200 hover:border-burgundy-700 hover:bg-burgundy-50/50 transition-all text-left group"
               >
-                <div className="text-base mb-1">📁</div>
+                <div className="h-7 w-7 rounded bg-navy-50 text-navy-800 flex items-center justify-center mb-2">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                  </svg>
+                </div>
                 <div className="text-xs font-bold text-navy-950 group-hover:text-burgundy-800">
-                  Cross-Bank Dockets
+                  Cross-Institutional Dockets
                 </div>
                 <div className="text-[10px] text-gray-500 mt-0.5">
-                  Inspect empanelled institutional client dockets (ICICI, Axis)
+                  Inspect empanelled institutional client dockets
                 </div>
               </Link>
 
@@ -109,7 +115,11 @@ export default function DashboardPage() {
                 href="/documents"
                 className="p-3 rounded-lg border border-gray-200 hover:border-burgundy-700 hover:bg-burgundy-50/50 transition-all text-left group"
               >
-                <div className="text-base mb-1">📄</div>
+                <div className="h-7 w-7 rounded bg-navy-50 text-navy-800 flex items-center justify-center mb-2">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
                 <div className="text-xs font-bold text-navy-950 group-hover:text-burgundy-800">
                   Document Vault
                 </div>
@@ -122,12 +132,16 @@ export default function DashboardPage() {
                 href="/admin/organizations"
                 className="p-3 rounded-lg border border-gray-200 hover:border-burgundy-700 hover:bg-burgundy-50/50 transition-all text-left group"
               >
-                <div className="text-base mb-1">🏦</div>
+                <div className="h-7 w-7 rounded bg-navy-50 text-navy-800 flex items-center justify-center mb-2">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                </div>
                 <div className="text-xs font-bold text-navy-950 group-hover:text-burgundy-800">
-                  Empanelled Banks
+                  Empanelled Institutions
                 </div>
                 <div className="text-[10px] text-gray-500 mt-0.5">
-                  Manage bank client branches & institutional users
+                  Manage client institutions & organizational users
                 </div>
               </Link>
 
@@ -135,7 +149,11 @@ export default function DashboardPage() {
                 href="/admin/audit-logs"
                 className="p-3 rounded-lg border border-gray-200 hover:border-burgundy-700 hover:bg-burgundy-50/50 transition-all text-left group"
               >
-                <div className="text-base mb-1">📜</div>
+                <div className="h-7 w-7 rounded bg-navy-50 text-navy-800 flex items-center justify-center mb-2">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                  </svg>
+                </div>
                 <div className="text-xs font-bold text-navy-950 group-hover:text-burgundy-800">
                   Compliance Audit Trail
                 </div>
@@ -151,7 +169,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
             <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400">
-              {isPanaceaStaff ? 'Total Cross-Bank Dockets' : 'Total Active Bank Dockets'}
+              {isPanaceaStaff ? 'Total Active Dockets' : 'Total Active Dockets'}
             </span>
             <div className="mt-2 text-3xl font-bold text-navy-950 font-display">
               {loading ? '—' : totalCases}
@@ -195,11 +213,11 @@ export default function DashboardPage() {
           <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
             <div>
               <h2 className="font-display text-base font-bold text-navy-950">
-                {isPanaceaStaff ? 'Active Cross-Bank Case Dockets' : 'Your Bank Recovery Dockets'}
+                {isPanaceaStaff ? 'Active Institutional Case Dockets' : 'Your Institutional Recovery Dockets'}
               </h2>
               <p className="text-[11px] text-gray-500 mt-0.5">
                 {isPanaceaStaff
-                  ? 'Real-time enforcement movements across all empanelled banks'
+                  ? 'Real-time enforcement movements across all empanelled institutions'
                   : 'Real-time milestone updates for your institution'}
               </p>
             </div>
@@ -217,7 +235,7 @@ export default function DashboardPage() {
                   </th>
                   {isPanaceaStaff && (
                     <th className="px-6 py-3 font-semibold uppercase tracking-wider text-gray-600">
-                      Bank Institution
+                      Creditor Institution
                     </th>
                   )}
                   <th className="px-6 py-3 font-semibold uppercase tracking-wider text-gray-600">

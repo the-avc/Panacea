@@ -88,7 +88,7 @@ export default function AuctionAssistancePage() {
                   </h3>
                   <p className="text-xs text-gray-600 leading-relaxed">
                     Facilitating site visits and property inspections for interested bidders during the statutory pre-auction
-                    inspection window under authorized bank protocol.
+                    inspection window under authorized institutional protocol.
                   </p>
                 </div>
 

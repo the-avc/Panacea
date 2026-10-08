@@ -25,9 +25,10 @@ export default function TermsOfServicePage() {
           </h2>
           <p>
             The services offered by Panacea Consultancy Private Limited are exclusively intended for
-            corporate banking, NBFC, and financial institution clients under formal empanelment or
-            bilateral master service agreements. We do not provide advisory or representation
-            services to individual retail borrowers or the general public.
+            Banks, NBFCs, Asset Reconstruction Companies (ARCs), Housing Finance Companies, Insurance
+            Providers, and Institutional Creditors under formal empanelment or bilateral master service
+            agreements. We do not provide advisory or representation services to individual retail
+            borrowers or the general public.
           </p>
         </div>
 

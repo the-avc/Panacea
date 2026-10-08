@@ -89,13 +89,10 @@ function LoginFormContent() {
       <div className="sm:mx-auto sm:w-full sm:max-w-xl relative z-10">
         {/* Brand Header */}
         <div className="text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-navy-900 border border-gold-500/40 text-gold-400 font-display text-2xl font-bold shadow-lg">
-            P
-          </div>
-          <h1 className="mt-3 font-display text-2xl sm:text-3xl font-bold tracking-tight text-white">
+          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-[0.06em] text-white">
             PANACEA CONSULTANCY PRIVATE LIMITED
           </h1>
-          <p className="mt-1 text-xs uppercase tracking-widest text-gold-400 font-semibold">
+          <p className="mt-1 text-xs uppercase tracking-[0.2em] text-gold-400 font-semibold">
             Institutional Operations & Secured Client Platform
           </p>
         </div>
@@ -111,7 +108,9 @@ function LoginFormContent() {
                 : 'text-gray-400 hover:text-white'
             }`}
           >
-            <span>🏛️</span>
+            <svg className="h-4 w-4 text-gold-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+            </svg>
             <span>Company Directorate & Operations Staff</span>
           </button>
           <button
@@ -123,27 +122,15 @@ function LoginFormContent() {
                 : 'text-gray-400 hover:text-white'
             }`}
           >
-            <span>🏦</span>
-            <span>Empanelled Bank Clients</span>
+            <svg className="h-4 w-4 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+            <span>Empanelled Institutional Clients</span>
           </button>
         </div>
 
         {/* Login Card */}
         <div className="mt-4 rounded-2xl bg-white p-6 sm:p-8 text-navy-950 shadow-2xl border border-gray-100">
-          <div className="mb-5 rounded-md bg-navy-50 p-3 text-[11px] text-navy-800 border border-navy-100 flex items-start gap-2.5">
-            <span className="text-base leading-none">🛡️</span>
-            <div>
-              <span className="font-bold block uppercase tracking-wider text-navy-950 mb-0.5">
-                {activeTab === 'staff'
-                  ? 'RESTRICTED EXECUTIVE & ENFORCEMENT GATEWAY'
-                  : 'AUTHORIZED SECURED CREDITOR ACCESS ONLY'}
-              </span>
-              {activeTab === 'staff'
-                ? 'Authorized access for Managing Directors, Operations Heads, Legal Recovery Advocates, and Field Investigators.'
-                : 'Secured access for Empanelled Bank Nodal Officers and Recovery Desks under SARFAESI Act, 2002.'}
-            </div>
-          </div>
-
           {errorMessage && (
             <div
               role="alert"
@@ -156,14 +143,20 @@ function LoginFormContent() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-xs font-semibold text-navy-900 mb-1">
-                {activeTab === 'staff' ? 'Company Staff / Director Email' : 'Institutional Bank Officer Email'}
+                {activeTab === 'staff'
+                  ? 'Company Staff / Director Email'
+                  : 'Institutional Creditor Officer Email'}
               </label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder={activeTab === 'staff' ? 'director@panaceaconsultancy.com' : 'nodal.officer@bank.com'}
+                placeholder={
+                  activeTab === 'staff'
+                    ? 'director@panaceaconsultancy.com'
+                    : 'nodal.officer@institution.com'
+                }
                 className="w-full rounded-md border border-gray-300 px-3 py-2 text-xs text-navy-950 focus:border-navy-600 focus:outline-none"
               />
             </div>
@@ -214,10 +207,10 @@ function LoginFormContent() {
               {submitting
                 ? 'Verifying Security Session...'
                 : showMfa
-                ? 'Verify MFA & Enter Command Center'
-                : activeTab === 'staff'
-                ? 'Authenticate Directorate & Staff Session →'
-                : 'Authenticate & Enter Bank Portal →'}
+                  ? 'Verify MFA & Enter Command Center'
+                  : activeTab === 'staff'
+                    ? 'Authenticate Directorate & Staff Session →'
+                    : 'Authenticate & Enter Client Portal →'}
             </button>
           </form>
 
@@ -228,7 +221,7 @@ function LoginFormContent() {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
                   {activeTab === 'staff'
                     ? 'Fast-Switch Company & Director Personas'
-                    : 'Fast-Switch Bank Client Personas'}
+                    : 'Fast-Switch Institutional Client Personas'}
                 </span>
                 <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-mono font-bold">
                   Dev/Test Active
@@ -237,11 +230,15 @@ function LoginFormContent() {
 
               <div className="mb-3 p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-[11px] flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <span className="font-bold">⚡ Universal Dev Password: </span>
-                  <code className="bg-amber-100/80 px-1 py-0.5 rounded font-mono font-bold text-amber-950">Panacea#DevTest2026</code>
+                  <span className="font-bold">Universal Dev Password: </span>
+                  <code className="bg-amber-100/80 px-1 py-0.5 rounded font-mono font-bold text-amber-950">
+                    Panacea#DevTest2026
+                  </code>
                   <span className="mx-1.5 text-amber-400">·</span>
                   <span className="font-bold">MFA TOTP: </span>
-                  <code className="bg-amber-100/80 px-1 py-0.5 rounded font-mono font-bold text-amber-950">000000</code>
+                  <code className="bg-amber-100/80 px-1 py-0.5 rounded font-mono font-bold text-amber-950">
+                    000000
+                  </code>
                 </div>
                 <button
                   type="button"
@@ -251,7 +248,7 @@ function LoginFormContent() {
                   }}
                   className="px-2 py-1 rounded bg-amber-200 hover:bg-amber-300 font-bold text-[10px] text-amber-950 transition-colors"
                 >
-                  ⚡ Auto-Fill Password & MFA
+                  Auto-Fill Password & MFA
                 </button>
               </div>
 
@@ -279,12 +276,12 @@ function LoginFormContent() {
                           }}
                           className="text-[10px] bg-gold-400 hover:bg-gold-500 text-navy-950 font-bold px-2 py-0.5 rounded shadow-sm"
                         >
-                          ⚡ Quick Sign In
+                          Quick Sign In
                         </button>
                       </div>
                     </div>
                     <span className="text-gray-500 text-[10px] block mt-0.5">
-                      Lead Strategist & Executive Platform Super Admin
+                       Lead Strategist & Executive Platform Super Admin
                     </span>
                   </div>
 
@@ -310,7 +307,7 @@ function LoginFormContent() {
                           }}
                           className="text-[10px] bg-gold-400 hover:bg-gold-500 text-navy-950 font-bold px-2 py-0.5 rounded shadow-sm"
                         >
-                          ⚡ Quick Sign In
+                          Quick Sign In
                         </button>
                       </div>
                     </div>
@@ -341,7 +338,7 @@ function LoginFormContent() {
                           }}
                           className="text-[10px] bg-navy-950 hover:bg-navy-900 text-white font-bold px-2 py-0.5 rounded shadow-sm"
                         >
-                          ⚡ Quick Sign In
+                          Quick Sign In
                         </button>
                       </div>
                     </div>
@@ -372,7 +369,7 @@ function LoginFormContent() {
                           }}
                           className="text-[10px] bg-navy-950 hover:bg-navy-900 text-white font-bold px-2 py-0.5 rounded shadow-sm"
                         >
-                          ⚡ Quick Sign In
+                          Quick Sign In
                         </button>
                       </div>
                     </div>
@@ -405,7 +402,7 @@ function LoginFormContent() {
                           }}
                           className="text-[10px] bg-blue-600 hover:bg-blue-700 text-white font-bold px-2 py-0.5 rounded shadow-sm"
                         >
-                          ⚡ Quick Sign In
+                          Quick Sign In
                         </button>
                       </div>
                     </div>
@@ -436,7 +433,7 @@ function LoginFormContent() {
                           }}
                           className="text-[10px] bg-purple-600 hover:bg-purple-700 text-white font-bold px-2 py-0.5 rounded shadow-sm"
                         >
-                          ⚡ Quick Sign In
+                          Quick Sign In
                         </button>
                       </div>
                     </div>

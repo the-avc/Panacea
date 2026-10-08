@@ -30,8 +30,8 @@ export default function PossessionExecutionPage() {
               Execution of Section 14 Orders
             </h1>
             <p className="mt-4 text-xs sm:text-sm text-gray-300 leading-relaxed">
-              Ground execution of Section 14 orders to recover debt by way of possession of secured assets,
-              protecting client brand equity and ensuring better business relationships.
+              Ground execution of Section 14 orders to recover debt by way of possession of secured
+              assets, protecting client brand equity and ensuring better business relationships.
             </p>
           </div>
         </div>
@@ -48,9 +48,10 @@ export default function PossessionExecutionPage() {
                   Core Mandate from Corporate Profile
                 </span>
                 <p className="italic text-gray-800">
-                  “We fully understand that we are frequently dealing with sensitive issues while recovering the delinquent accounts.
-                  Our aim to recover the debt by way of possession of secured assets, mortgage with our clients at the same time we
-                  also ensure better business relationship protecting the interests of our clients.”
+                  “We fully understand that we are frequently dealing with sensitive issues while
+                  recovering the delinquent accounts. Our aim to recover the debt by way of
+                  possession of secured assets, mortgage with our clients at the same time we also
+                  ensure better business relationship protecting the interests of our clients.”
                 </p>
               </div>
 
@@ -62,9 +63,11 @@ export default function PossessionExecutionPage() {
                   Lawful Physical Possession & Asset Securing
                 </h2>
                 <p className="mt-3 text-xs text-gray-600 leading-relaxed">
-                  Execution of Section 14 orders requires coordination with district authorities, deputed magistrates,
-                  and local police. Being conscious that clients release their brand to us when allocating enforcement files,
-                  we conduct all on-ground proceedings with maximum professionalism, lawful demeanor, and rigorous documentation.
+                  Execution of Section 14 orders requires coordination with district authorities,
+                  deputed magistrates, and local police. Being conscious that clients release their
+                  brand to us when allocating enforcement files, we conduct all on-ground
+                  proceedings with maximum professionalism, lawful demeanor, and rigorous
+                  documentation.
                 </p>
               </div>
 
@@ -76,8 +79,9 @@ export default function PossessionExecutionPage() {
                     Administrative & Police Protection Liaison
                   </h3>
                   <p className="text-xs text-gray-600 leading-relaxed">
-                    Formal communication with police superintendents and local police stations to ensure requisite police
-                    force is deputed to assist the magistrate or court commissioner on the day of execution.
+                    Formal communication with police superintendents and local police stations to
+                    ensure requisite police force is deputed to assist the magistrate or court
+                    commissioner on the day of execution.
                   </p>
                 </div>
 
@@ -87,8 +91,9 @@ export default function PossessionExecutionPage() {
                     Magisterial Possession Execution
                   </h3>
                   <p className="text-xs text-gray-600 leading-relaxed">
-                    Accompanying the deputed Executive Magistrate, Circle Officer, or Advocate Commissioner to the mortgaged property
-                    for lawful entry and takeover of physical possession.
+                    Accompanying the deputed Executive Magistrate, Circle Officer, or Advocate
+                    Commissioner to the mortgaged property for lawful entry and takeover of physical
+                    possession.
                   </p>
                 </div>
 
@@ -98,8 +103,8 @@ export default function PossessionExecutionPage() {
                     Panchnama & Inventory Documentation
                   </h3>
                   <p className="text-xs text-gray-600 leading-relaxed">
-                    Preparing the spot Panchnama in the presence of independent witnesses, itemizing movable assets found
-                    at the site, and recording photographic/video evidence.
+                    Preparing the spot Panchnama in the presence of independent witnesses, itemizing
+                    movable assets found at the site, and recording photographic/video evidence.
                   </p>
                 </div>
 
@@ -109,8 +114,8 @@ export default function PossessionExecutionPage() {
                     Handover to Authorised Officer
                   </h3>
                   <p className="text-xs text-gray-600 leading-relaxed">
-                    Formal handover of keys, locks, and possession memorandum to the Authorised Officer of the secured
-                    creditor bank, and deployment of site security guards.
+                    Formal handover of keys, locks, and possession memorandum to the Authorised
+                    Officer of the secured creditor bank, and deployment of site security guards.
                   </p>
                 </div>
               </div>
@@ -118,8 +123,9 @@ export default function PossessionExecutionPage() {
               {/* Brand Equity Commitment */}
               <div className="p-5 rounded-xl border border-gray-200 bg-navy-50/50 text-xs text-gray-700 leading-relaxed">
                 <span className="font-bold text-navy-950 block mb-1">Brand Equity Protection:</span>
-                “We understand that by allocating the file to us for Enforcement, our clients also release their brand to us.
-                Being conscious of this, we ensure that we protect one of the most important aspects of our clients business that is their brand equity.”
+                “We understand that by allocating the file to us for Enforcement, our clients also
+                release their brand to us. Being conscious of this, we ensure that we protect one of
+                the most important aspects of our clients business that is their brand equity.”
               </div>
             </div>
 
@@ -133,9 +139,15 @@ export default function PossessionExecutionPage() {
                   On-Ground Execution Desks
                 </h4>
                 <div className="space-y-2 text-xs font-semibold text-navy-900">
-                  <div className="p-2.5 rounded bg-white border border-navy-100">State of Bihar (All Districts)</div>
-                  <div className="p-2.5 rounded bg-white border border-navy-100">State of Jharkhand (All Districts)</div>
-                  <div className="p-2.5 rounded bg-white border border-navy-100">State of Chhattisgarh (All Districts)</div>
+                  <div className="p-2.5 rounded bg-white border border-navy-100">
+                    State of Bihar (All Districts)
+                  </div>
+                  <div className="p-2.5 rounded bg-white border border-navy-100">
+                    State of Jharkhand (All Districts)
+                  </div>
+                  <div className="p-2.5 rounded bg-white border border-navy-100">
+                    State of Chhattisgarh (All Districts)
+                  </div>
                 </div>
               </div>
 
@@ -149,7 +161,10 @@ export default function PossessionExecutionPage() {
                 <div className="space-y-2 text-xs text-gray-700 mb-4">
                   <div>
                     <span className="font-bold block text-navy-950">Email:</span>
-                    <a href="mailto:panaceaconsultancypvtltd@gmail.com" className="text-burgundy-800 font-semibold break-all">
+                    <a
+                      href="mailto:panaceaconsultancypvtltd@gmail.com"
+                      className="text-burgundy-800 font-semibold break-all"
+                    >
                       panaceaconsultancypvtltd@gmail.com
                     </a>
                   </div>
@@ -162,7 +177,7 @@ export default function PossessionExecutionPage() {
                   href={`${portalBase}/login?portal=client`}
                   className="block w-full text-center rounded-md bg-navy-950 py-2.5 px-4 text-xs font-semibold text-white hover:bg-navy-900 transition-colors"
                 >
-                  Bank Client Portal Login →
+                  Client Portal Login →
                 </a>
               </div>
             </div>

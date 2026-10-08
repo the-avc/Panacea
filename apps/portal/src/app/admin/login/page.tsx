@@ -79,26 +79,26 @@ export default function AdminLoginPage() {
       <div className="sm:mx-auto sm:w-full sm:max-w-xl relative z-10">
         {/* Brand Header */}
         <div className="text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-burgundy-950 border border-gold-500/40 text-gold-400 font-display text-2xl font-bold shadow-lg">
-            🏛️
-          </div>
-          <h1 className="mt-3 font-display text-2xl sm:text-3xl font-bold tracking-tight text-white">
-            DIRECTORATE & ADMINISTRATIVE GATEWAY
+          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-[0.06em] text-white">
+            PANACEA CONSULTANCY PRIVATE LIMITED
           </h1>
-          <p className="mt-1 text-xs uppercase tracking-widest text-gold-400 font-semibold">
-            Panacea Consultancy Private Limited · Executive Command Center
+          <p className="mt-1 text-xs uppercase tracking-[0.2em] text-gold-400 font-semibold">
+            Directorate & Administrative Command Center
           </p>
         </div>
 
         {/* Login Card */}
         <div className="mt-6 rounded-2xl bg-white p-6 sm:p-8 text-navy-950 shadow-2xl border border-gray-100">
           <div className="mb-5 rounded-md bg-burgundy-50 p-3.5 text-[11px] text-burgundy-950 border border-burgundy-200 flex items-start gap-2.5">
-            <span className="text-base leading-none">🛡️</span>
+            <svg className="h-5 w-5 text-burgundy-900 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
             <div>
               <span className="font-bold block uppercase tracking-wider text-burgundy-900 mb-0.5">
                 RESTRICTED EXECUTIVE ACCESS ONLY
               </span>
-              Authorized access for Managing Director Mr. Prashant Kumar, Operations Director Mrs. Anjana Singh, Legal Counsel, and System Administrators.
+              Authorized access for Managing Director Mr. Prashant Kumar, Operations Director Mrs.
+              Anjana Singh, Legal Counsel, and System Administrators.
             </div>
           </div>
 
@@ -165,8 +165,8 @@ export default function AdminLoginPage() {
               {submitting
                 ? 'Verifying Directorate Session...'
                 : showMfa
-                ? 'Verify MFA & Enter Command Center'
-                : 'Authenticate Director & Admin Session →'}
+                  ? 'Verify MFA & Enter Command Center'
+                  : 'Authenticate Director & Admin Session →'}
             </button>
           </form>
 
@@ -184,11 +184,15 @@ export default function AdminLoginPage() {
 
               <div className="mb-3 p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-[11px] flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <span className="font-bold">⚡ Universal Dev Password: </span>
-                  <code className="bg-amber-100/80 px-1 py-0.5 rounded font-mono font-bold text-amber-950">Panacea#DevTest2026</code>
+                  <span className="font-bold">Universal Dev Password: </span>
+                  <code className="bg-amber-100/80 px-1 py-0.5 rounded font-mono font-bold text-amber-950">
+                    Panacea#DevTest2026
+                  </code>
                   <span className="mx-1.5 text-amber-400">·</span>
                   <span className="font-bold">MFA TOTP: </span>
-                  <code className="bg-amber-100/80 px-1 py-0.5 rounded font-mono font-bold text-amber-950">000000</code>
+                  <code className="bg-amber-100/80 px-1 py-0.5 rounded font-mono font-bold text-amber-950">
+                    000000
+                  </code>
                 </div>
                 <button
                   type="button"
@@ -198,7 +202,7 @@ export default function AdminLoginPage() {
                   }}
                   className="px-2 py-1 rounded bg-amber-200 hover:bg-amber-300 font-bold text-[10px] text-amber-950 transition-colors"
                 >
-                  ⚡ Auto-Fill Password & MFA
+                  Auto-Fill Password & MFA
                 </button>
               </div>
 
@@ -222,7 +226,7 @@ export default function AdminLoginPage() {
                       </span>
                     </div>
                     <span className="text-gray-500 text-[10px] block mt-0.5">
-                      Platform Super Admin · Cross-Bank Portfolio Oversight
+                      Platform Super Admin · Institutional Portfolio Oversight
                     </span>
                   </button>
                   <button
@@ -231,7 +235,7 @@ export default function AdminLoginPage() {
                     onClick={() => handleInstantLogin('prashant.kumar@panaceaconsultancy.com')}
                     className="px-2.5 py-1.5 rounded bg-burgundy-900 hover:bg-burgundy-800 text-gold-400 font-bold text-[10px] whitespace-nowrap shadow-sm disabled:opacity-50"
                   >
-                    ⚡ Quick Sign In
+                    Quick Sign In
                   </button>
                 </div>
 
@@ -263,7 +267,7 @@ export default function AdminLoginPage() {
                     onClick={() => handleInstantLogin('anjana.singh@panaceaconsultancy.com')}
                     className="px-2.5 py-1.5 rounded bg-burgundy-900 hover:bg-burgundy-800 text-gold-400 font-bold text-[10px] whitespace-nowrap shadow-sm disabled:opacity-50"
                   >
-                    ⚡ Quick Sign In
+                    Quick Sign In
                   </button>
                 </div>
 
@@ -295,7 +299,7 @@ export default function AdminLoginPage() {
                     onClick={() => handleInstantLogin('admin@panaceaconsultancy.in')}
                     className="px-2.5 py-1.5 rounded bg-navy-900 hover:bg-navy-800 text-white font-bold text-[10px] whitespace-nowrap shadow-sm disabled:opacity-50"
                   >
-                    ⚡ Quick Sign In
+                    Quick Sign In
                   </button>
                 </div>
               </div>
@@ -303,9 +307,9 @@ export default function AdminLoginPage() {
           )}
 
           <div className="mt-5 text-center text-xs text-gray-500 border-t border-gray-100 pt-3">
-            Looking for bank creditor access?{' '}
+            Looking for institutional creditor access?{' '}
             <Link href="/login?portal=client" className="text-navy-900 font-bold hover:underline">
-              Switch to Bank Client Portal →
+              Switch to Client Portal →
             </Link>
           </div>
         </div>

@@ -30,9 +30,10 @@ export default function HomePage() {
 
             {/* Subheading */}
             <p className="mt-6 text-base sm:text-lg text-gray-300 leading-relaxed max-w-2xl font-normal">
-              Panacea Consultancy Private Limited provides specialized para-legal execution,
-              rigorous SARFAESI enforcement, Section 14 acquisition, asset verification, and
-              third-party investigations for leading financial institutions, banks, and NBFCs.
+              Panacea Consultancy Private Limited delivers structured on-ground para-legal execution,
+              statutory SARFAESI enforcement, Section 14 magisterial petitions, physical possession takeovers,
+              and independent investigations for Banks, Non-Banking Financial Companies (NBFCs), Asset Reconstruction
+              Companies (ARCs), Housing Finance Institutions, and General Insurance Providers.
             </p>
 
             {/* CTA Buttons */}
@@ -57,11 +58,11 @@ export default function HomePage() {
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
+                  strokeWidth="2"
                 >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth="2"
                     d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                   />
                 </svg>
@@ -72,13 +73,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Corporate Commitments — Verbatim from Page 1 */}
+      {/* Corporate Commitments — Verbatim from Corporate Profile */}
       <section className="border-y border-navy-100 bg-white py-10 shadow-sm">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="p-4 rounded-xl border border-gray-100 bg-[#fbfcfd]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-navy-50 text-navy-900 mb-3 font-bold">
-                🛡️
+            <div className="p-5 rounded-xl border border-gray-200 bg-[#fbfcfd]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-navy-50 text-navy-900 mb-3 border border-navy-100">
+                <svg className="h-5 w-5 text-navy-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
               </div>
               <h4 className="text-xs font-bold text-navy-950 uppercase tracking-wide">
                 Protecting Client Brand Equity
@@ -89,9 +92,11 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="p-4 rounded-xl border border-gray-100 bg-[#fbfcfd]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-navy-50 text-navy-900 mb-3 font-bold">
-                🔒
+            <div className="p-5 rounded-xl border border-gray-200 bg-[#fbfcfd]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-navy-50 text-navy-900 mb-3 border border-navy-100">
+                <svg className="h-5 w-5 text-navy-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
               </div>
               <h4 className="text-xs font-bold text-navy-950 uppercase tracking-wide">
                 Data Security & Confidentiality
@@ -101,9 +106,11 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="p-4 rounded-xl border border-gray-100 bg-[#fbfcfd]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-navy-50 text-navy-900 mb-3 font-bold">
-                ⚖️
+            <div className="p-5 rounded-xl border border-gray-200 bg-[#fbfcfd]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-navy-50 text-navy-900 mb-3 border border-navy-100">
+                <svg className="h-5 w-5 text-navy-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                </svg>
               </div>
               <h4 className="text-xs font-bold text-navy-950 uppercase tracking-wide">
                 Integrity & Honesty in Business
@@ -113,9 +120,11 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="p-4 rounded-xl border border-gray-100 bg-[#fbfcfd]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-navy-50 text-navy-900 mb-3 font-bold">
-                🤝
+            <div className="p-5 rounded-xl border border-gray-200 bg-[#fbfcfd]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-navy-50 text-navy-900 mb-3 border border-navy-100">
+                <svg className="h-5 w-5 text-navy-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
               </div>
               <h4 className="text-xs font-bold text-navy-950 uppercase tracking-wide">
                 Relieving Debt Anxiety
@@ -303,16 +312,23 @@ export default function HomePage() {
       {/* Existing Assignments — 11 Empanelled Institutions (Pages 2 & 3) */}
       <section className="py-16 lg:py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-12">
+          <div className="text-center max-w-3xl mx-auto mb-10">
             <span className="text-xs font-bold uppercase tracking-widest text-burgundy-800">
-              Existing Assignments
+              Institutional Empanelments
             </span>
             <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-navy-950">
-              Empaneled with Esteemed Institutions
+              Empaneled with Esteemed Institutions Across Sectors
             </h2>
-            <p className="mt-2 text-xs text-gray-600">
-              We organization “Panacea Consultancy Private Limited” Empaneled with esteemed institutions for Bihar, Jharkhand & Chhattisgarh such as:
+            <p className="mt-2 text-xs text-gray-600 leading-relaxed">
+              Panacea Consultancy Private Limited is empaneled with leading institutional creditors and corporations across Bihar, Jharkhand & Chhattisgarh—spanning Commercial Banks, Small Finance Banks, NBFCs, Asset Reconstruction Companies (ARCs), Housing Finance Institutions, and General Insurance Corporations:
             </p>
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-[11px] font-semibold text-navy-800">
+              <span className="rounded-full bg-navy-50 border border-navy-100 px-3 py-1">Commercial & SFBs</span>
+              <span className="rounded-full bg-navy-50 border border-navy-100 px-3 py-1">NBFCs & Credit Funds</span>
+              <span className="rounded-full bg-navy-50 border border-navy-100 px-3 py-1">Asset Reconstruction (ARCs)</span>
+              <span className="rounded-full bg-navy-50 border border-navy-100 px-3 py-1">Housing Finance</span>
+              <span className="rounded-full bg-navy-50 border border-navy-100 px-3 py-1">General Insurance</span>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

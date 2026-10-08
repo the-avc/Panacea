@@ -203,7 +203,7 @@ export default function AboutPage() {
                 districts. Enforcement, third-party investigations, asset verification, and recovery support.
               </p>
               <span className="inline-block px-2.5 py-1 bg-navy-50 text-navy-800 text-[11px] font-semibold rounded">
-                Active Banking Vertical
+                Active Institutional Mandates (Banking, NBFC, ARC & Insurance)
               </span>
             </div>
 
@@ -214,7 +214,7 @@ export default function AboutPage() {
                 Jamshedpur, Dhanbad, Bokaro, and all adjoining commissionerates.
               </p>
               <span className="inline-block px-2.5 py-1 bg-navy-50 text-navy-800 text-[11px] font-semibold rounded">
-                Active Banking Vertical
+                Active Institutional Mandates (Banking, NBFC, ARC & Insurance)
               </span>
             </div>
 
@@ -225,7 +225,7 @@ export default function AboutPage() {
                 covering Raipur, Bilaspur, Durg, Bhilai, and regional districts.
               </p>
               <span className="inline-block px-2.5 py-1 bg-navy-50 text-navy-800 text-[11px] font-semibold rounded">
-                Active Banking Vertical
+                Active Institutional Mandates (Banking, NBFC, ARC & Insurance)
               </span>
             </div>
           </div>

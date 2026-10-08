@@ -98,7 +98,7 @@ export default function AdminUsersPage() {
               Personnel Directory & Access Control
             </h1>
             <p className="mt-1 text-xs text-gray-500">
-              Manage Directorate leadership, legal counsel, field recovery officers, and bank nodal officers.
+              Manage Directorate leadership, legal counsel, field recovery officers, and institutional nodal officers.
             </p>
           </div>
 
@@ -107,7 +107,9 @@ export default function AdminUsersPage() {
             onClick={() => setShowModal(true)}
             className="rounded-md bg-burgundy-950 hover:bg-burgundy-900 active:bg-burgundy-950 px-4 py-2 text-xs font-bold text-gold-300 shadow-sm transition-colors flex items-center justify-center gap-1.5 shrink-0"
           >
-            <span>➕</span>
+            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
             <span>Onboard Personnel / Officer</span>
           </button>
         </div>
@@ -207,15 +209,18 @@ export default function AdminUsersPage() {
                     Onboard New Personnel / Officer
                   </h3>
                   <p className="text-xs text-gray-500">
-                    Issue credentials for Panacea operations staff or client bank nodal desks.
+                    Issue credentials for Panacea operations staff or institutional client nodal desks.
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="text-gray-400 hover:text-gray-600 p-1"
+                  className="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100 transition-colors"
+                  aria-label="Close modal"
                 >
-                  ✕
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
               </div>
 

@@ -177,7 +177,7 @@ export default function SarfaesiPage() {
                 recording, panchnama documentation, inventory listing of all movable goods, lawful
                 eviction of unauthorized occupants, replacement of physical locks, deploying static
                 security personnel, and formal physical handover of possession to the Authorised
-                Officer of the client bank.
+                Officer of the client institution.
               </p>
               <Link
                 href="/services/sarfaesi/possession-execution"
@@ -198,7 +198,7 @@ export default function SarfaesiPage() {
               Track Active SARFAESI Enforcement Dockets
             </h4>
             <p className="mt-1 text-xs text-gray-300">
-              Bank nodal officers can inspect filed Section 14 petitions, orders, and execution reports.
+              Authorized nodal officers (Banks, NBFCs, ARCs) can inspect filed Section 14 petitions, orders, and execution reports.
             </p>
           </div>
           <a

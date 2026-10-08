@@ -30,8 +30,9 @@ export default function Section13NoticePage() {
               Drafting Demand Notices (u/s 13.2)
             </h1>
             <p className="mt-4 text-xs sm:text-sm text-gray-300 leading-relaxed">
-              We assist financial institutions with all SARFAESI-related activities, including the drafting of
-              Demand Notices (u/s 13.2), backed by a team with a strong legal background for drafting of notices and petitions.
+              We assist financial institutions with all SARFAESI-related activities, including the
+              drafting of Demand Notices (u/s 13.2), backed by a team with a strong legal background
+              for drafting of notices and petitions.
             </p>
           </div>
         </div>
@@ -48,8 +49,10 @@ export default function Section13NoticePage() {
                   Core Mandate from Corporate Profile
                 </span>
                 <p className="italic text-gray-800">
-                  “We assist financial institutions with all SARFAESI-related activities, including the drafting of Demand Notices (u/s 13.2)...
-                  Our objective: To complete the process under SARFAESI Act in mortgage properties. (Sending 13(2) notice to Auction of properties.)”
+                  “We assist financial institutions with all SARFAESI-related activities, including
+                  the drafting of Demand Notices (u/s 13.2)... Our objective: To complete the
+                  process under SARFAESI Act in mortgage properties. (Sending 13(2) notice to
+                  Auction of properties.)”
                 </p>
               </div>
 
@@ -61,10 +64,11 @@ export default function Section13NoticePage() {
                   Precision Legal Drafting for Secured Creditors
                 </h2>
                 <p className="mt-3 text-xs text-gray-600 leading-relaxed">
-                  Under the SARFAESI Act, 2002, issuing a valid and defensible Demand Notice under Section 13(2) is the mandatory
-                  first step to enforce security interests without the intervention of court. Our legal recovery team ensures that
-                  every notice accurately incorporates the debt schedule, mortgage documents, borrower and guarantor particulars,
-                  and clear calculation of outstanding amounts.
+                  Under the SARFAESI Act, 2002, issuing a valid and defensible Demand Notice under
+                  Section 13(2) is the mandatory first step to enforce security interests without
+                  the intervention of court. Our legal recovery team ensures that every notice
+                  accurately incorporates the debt schedule, mortgage documents, borrower and
+                  guarantor particulars, and clear calculation of outstanding amounts.
                 </p>
               </div>
 
@@ -76,8 +80,8 @@ export default function Section13NoticePage() {
                     Mortgage Property Schedule Verification
                   </h3>
                   <p className="text-xs text-gray-600 leading-relaxed">
-                    Meticulous legal examination of title deeds, equitable mortgage memoranda, and property boundary schedules
-                    to ensure complete accuracy in notice particulars.
+                    Meticulous legal examination of title deeds, equitable mortgage memoranda, and
+                    property boundary schedules to ensure complete accuracy in notice particulars.
                   </p>
                 </div>
 
@@ -87,8 +91,9 @@ export default function Section13NoticePage() {
                     Legal Notice Drafting & Vetting
                   </h3>
                   <p className="text-xs text-gray-600 leading-relaxed">
-                    Prepared by personnel with a strong legal background, incorporating statutory 60-day demand timelines,
-                    aggregate default computations, and statutory caution against alienation of secured assets.
+                    Prepared by personnel with a strong legal background, incorporating statutory
+                    60-day demand timelines, aggregate default computations, and statutory caution
+                    against alienation of secured assets.
                   </p>
                 </div>
 
@@ -98,8 +103,8 @@ export default function Section13NoticePage() {
                     Dispatch & Service Proof Documentation
                   </h3>
                   <p className="text-xs text-gray-600 leading-relaxed">
-                    Tracking registered postal dispatch (RPAD / Speed Post) and assembling verifiable proof-of-service dockets
-                    required for subsequent Section 14 filing.
+                    Tracking registered postal dispatch (RPAD / Speed Post) and assembling
+                    verifiable proof-of-service dockets required for subsequent Section 14 filing.
                   </p>
                 </div>
 
@@ -109,17 +114,20 @@ export default function Section13NoticePage() {
                     Physical Affixture Assistance
                   </h3>
                   <p className="text-xs text-gray-600 leading-relaxed">
-                    Assistance with physical notice affixture at the conspicuous part of the mortgaged property with
-                    photographic proof and local panchas where required.
+                    Assistance with physical notice affixture at the conspicuous part of the
+                    mortgaged property with photographic proof and local panchas where required.
                   </p>
                 </div>
               </div>
 
               {/* Data Confidentiality Commitment */}
               <div className="p-5 rounded-xl border border-gray-200 bg-navy-50/50 text-xs text-gray-700 leading-relaxed">
-                <span className="font-bold text-navy-950 block mb-1">Confidentiality Guarantee:</span>
-                “We understand the importance of confidentiality of private data our clients, data security, and that is why
-                we ensure that the data provided to us always remains confidential.”
+                <span className="font-bold text-navy-950 block mb-1">
+                  Confidentiality Guarantee:
+                </span>
+                “We understand the importance of confidentiality of private data our clients, data
+                security, and that is why we ensure that the data provided to us always remains
+                confidential.”
               </div>
             </div>
 
@@ -133,9 +141,15 @@ export default function Section13NoticePage() {
                   Regional Operating Desks
                 </h4>
                 <div className="space-y-2 text-xs font-semibold text-navy-900">
-                  <div className="p-2.5 rounded bg-white border border-navy-100">State of Bihar (All Districts)</div>
-                  <div className="p-2.5 rounded bg-white border border-navy-100">State of Jharkhand (All Districts)</div>
-                  <div className="p-2.5 rounded bg-white border border-navy-100">State of Chhattisgarh (All Districts)</div>
+                  <div className="p-2.5 rounded bg-white border border-navy-100">
+                    State of Bihar (All Districts)
+                  </div>
+                  <div className="p-2.5 rounded bg-white border border-navy-100">
+                    State of Jharkhand (All Districts)
+                  </div>
+                  <div className="p-2.5 rounded bg-white border border-navy-100">
+                    State of Chhattisgarh (All Districts)
+                  </div>
                 </div>
               </div>
 
@@ -149,7 +163,10 @@ export default function Section13NoticePage() {
                 <div className="space-y-2 text-xs text-gray-700 mb-4">
                   <div>
                     <span className="font-bold block text-navy-950">Email:</span>
-                    <a href="mailto:panaceaconsultancypvtltd@gmail.com" className="text-burgundy-800 font-semibold break-all">
+                    <a
+                      href="mailto:panaceaconsultancypvtltd@gmail.com"
+                      className="text-burgundy-800 font-semibold break-all"
+                    >
                       panaceaconsultancypvtltd@gmail.com
                     </a>
                   </div>
@@ -162,7 +179,7 @@ export default function Section13NoticePage() {
                   href={`${portalBase}/login?portal=client`}
                   className="block w-full text-center rounded-md bg-navy-950 py-2.5 px-4 text-xs font-semibold text-white hover:bg-navy-900 transition-colors"
                 >
-                  Bank Client Portal Login →
+                  Client Portal Login →
                 </a>
               </div>
             </div>

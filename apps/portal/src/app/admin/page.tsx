@@ -36,8 +36,10 @@ export default function AdminDashboardPage() {
     return (
       <PortalLayout>
         <div className="max-w-xl mx-auto my-12 p-8 text-center bg-white rounded-2xl border border-burgundy-200 shadow-xl">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-burgundy-50 border border-burgundy-200 text-burgundy-900 text-2xl mb-4">
-            🏛️
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-burgundy-50 border border-burgundy-200 text-burgundy-900 mb-4">
+            <svg className="h-7 w-7 text-burgundy-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+            </svg>
           </div>
           <span className="text-[10px] font-bold uppercase tracking-widest text-burgundy-800 bg-burgundy-100/60 px-2.5 py-0.5 rounded">
             Restricted Directorate Gateway
@@ -60,7 +62,6 @@ export default function AdminDashboardPage() {
               href="/admin/login"
               className="w-full sm:w-auto rounded-md bg-burgundy-950 hover:bg-burgundy-900 px-5 py-2.5 text-xs font-bold text-gold-300 shadow-sm transition-colors flex items-center justify-center gap-2"
             >
-              <span>🏛️</span>
               <span>Authenticate as Director / Admin →</span>
             </Link>
             <Link
@@ -84,7 +85,7 @@ export default function AdminDashboardPage() {
             <div>
               <div className="flex items-center gap-2 mb-1.5">
                 <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-gold-500/20 text-gold-300 border border-gold-500/40">
-                  {isDirector ? '🏛️ Executive Directorate Command' : '⚙️ Systems Administration'}
+                  {isDirector ? 'Executive Directorate Command' : 'Systems Administration'}
                 </span>
                 <span className="text-xs text-gray-400">•</span>
                 <span className="text-xs text-gold-200">
@@ -95,7 +96,7 @@ export default function AdminDashboardPage() {
                 Platform Governance & Enforcement Command Center
               </h1>
               <p className="mt-1 text-xs text-gray-300 max-w-2xl leading-relaxed">
-                Centralized statutory administrative control under SARFAESI Act, 2002. Oversee client bank tenants, onboard recovery officers, inspect cryptographic audit trails, and manage security incidents across Bihar, Jharkhand & Chhattisgarh.
+                Centralized statutory administrative control under SARFAESI Act, 2002. Oversee client institutional tenants, onboard recovery officers, inspect cryptographic audit trails, and manage security incidents across Bihar, Jharkhand & Chhattisgarh.
               </p>
             </div>
 
@@ -104,15 +105,19 @@ export default function AdminDashboardPage() {
                 href="/admin/users"
                 className="rounded-md bg-gold-500 hover:bg-gold-400 active:bg-gold-600 px-3.5 py-2 text-xs font-bold text-navy-950 transition-colors shadow-sm flex items-center gap-1.5"
               >
-                <span>➕</span>
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
                 <span>Onboard Officer</span>
               </Link>
               <Link
                 href="/admin/organizations"
                 className="rounded-md bg-white/10 hover:bg-white/20 text-white border border-white/20 px-3.5 py-2 text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5"
               >
-                <span>🏦</span>
-                <span>Register Bank</span>
+                <svg className="h-3.5 w-3.5 text-gold-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                <span>Register Institution</span>
               </Link>
             </div>
           </div>
@@ -171,7 +176,11 @@ export default function AdminDashboardPage() {
               href="/admin/organizations"
               className="p-5 rounded-xl border border-gray-200 bg-white hover:border-navy-400 hover:shadow-md transition-all block group"
             >
-              <div className="text-2xl mb-2">🏦</div>
+              <div className="h-8 w-8 rounded-lg bg-navy-50 text-navy-900 border border-navy-100 flex items-center justify-center mb-3">
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+              </div>
               <h3 className="font-bold text-sm text-navy-950 group-hover:text-burgundy-800">
                 Empanelled Institutions
               </h3>
@@ -187,12 +196,16 @@ export default function AdminDashboardPage() {
               href="/admin/users"
               className="p-5 rounded-xl border border-gray-200 bg-white hover:border-navy-400 hover:shadow-md transition-all block group"
             >
-              <div className="text-2xl mb-2">👥</div>
+              <div className="h-8 w-8 rounded-lg bg-navy-50 text-navy-900 border border-navy-100 flex items-center justify-center mb-3">
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>
               <h3 className="font-bold text-sm text-navy-950 group-hover:text-burgundy-800">
                 Personnel & Access Control
               </h3>
               <p className="text-xs text-gray-500 mt-1">
-                Onboard legal counsel, field recovery agents, investigators, and bank officers.
+                Onboard legal counsel, field recovery agents, investigators, and institutional nodal officers.
               </p>
               <span className="inline-block mt-3 text-[11px] font-bold text-navy-900 group-hover:underline">
                 Manage Directory →
@@ -203,7 +216,11 @@ export default function AdminDashboardPage() {
               href="/admin/audit-logs"
               className="p-5 rounded-xl border border-gray-200 bg-white hover:border-navy-400 hover:shadow-md transition-all block group"
             >
-              <div className="text-2xl mb-2">📜</div>
+              <div className="h-8 w-8 rounded-lg bg-navy-50 text-navy-900 border border-navy-100 flex items-center justify-center mb-3">
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
               <h3 className="font-bold text-sm text-navy-950 group-hover:text-burgundy-800">
                 Statutory Audit Trail
               </h3>
@@ -219,7 +236,11 @@ export default function AdminDashboardPage() {
               href="/admin/security-events"
               className="p-5 rounded-xl border border-gray-200 bg-white hover:border-navy-400 hover:shadow-md transition-all block group"
             >
-              <div className="text-2xl mb-2">🚨</div>
+              <div className="h-8 w-8 rounded-lg bg-burgundy-50 text-burgundy-900 border border-burgundy-100 flex items-center justify-center mb-3">
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
               <h3 className="font-bold text-sm text-navy-950 group-hover:text-burgundy-800">
                 Security Incident Center
               </h3>

@@ -182,7 +182,9 @@ export default function ContactPage() {
                 {submitted ? (
                   <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-6 text-center">
                     <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 mb-3">
-                      ✓
+                      <svg className="h-6 w-6 text-emerald-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
                     </div>
                     <h4 className="text-base font-bold text-emerald-950">Inquiry Dispatched</h4>
                     <p className="mt-1 text-xs text-emerald-800 max-w-md mx-auto">
@@ -202,7 +204,7 @@ export default function ContactPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs font-semibold text-navy-900 mb-1">
-                          Financial Institution / Bank *
+                          Client Institution / Organization *
                         </label>
                         <input
                           type="text"
@@ -211,7 +213,7 @@ export default function ContactPage() {
                           onChange={(e) =>
                             setFormData({ ...formData, institutionName: e.target.value })
                           }
-                          placeholder="e.g. ICICI Bank / Axis Bank / Scheduled Commercial Bank"
+                          placeholder="e.g. Bank, NBFC, ARC, Housing Finance, or Corporate Creditor"
                           className="w-full rounded-md border border-gray-300 px-3 py-2 text-xs text-navy-950 focus:border-navy-600 focus:outline-none"
                         />
                       </div>
@@ -242,7 +244,7 @@ export default function ContactPage() {
                           required
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          placeholder="officer@bank.com"
+                          placeholder="officer@institution.com"
                           className="w-full rounded-md border border-gray-300 px-3 py-2 text-xs text-navy-950 focus:border-navy-600 focus:outline-none"
                         />
                       </div>

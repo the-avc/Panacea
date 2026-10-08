@@ -101,11 +101,11 @@ export default function CasesPage() {
               <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
                 isPanaceaStaff ? 'bg-burgundy-100 text-burgundy-900 font-bold' : 'bg-navy-100 text-navy-800'
               }`}>
-                {isPanaceaStaff ? '🏛️ Directorate & Operations Portfolio' : '🏦 Bank Recovery Portfolio'}
+                {isPanaceaStaff ? 'Directorate & Operations Portfolio' : 'Institutional Recovery Portfolio'}
               </span>
             </div>
             <h1 className="font-display text-2xl font-bold text-navy-950">
-              {isPanaceaStaff ? 'Cross-Bank Enforcement Dockets' : 'Secured Case Dockets'}
+              {isPanaceaStaff ? 'Cross-Institutional Enforcement Dockets' : 'Secured Case Dockets'}
             </h1>
             <p className="mt-1 text-xs text-gray-500">
               {isPanaceaStaff
@@ -120,7 +120,9 @@ export default function CasesPage() {
               isPanaceaStaff ? 'bg-burgundy-950 hover:bg-burgundy-900' : 'bg-navy-950 hover:bg-navy-900'
             }`}
           >
-            <span>➕</span>
+            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
             <span>{isPanaceaStaff ? 'Register New Mandate (Intake)' : 'New Docket Intake'}</span>
           </button>
         </div>
@@ -309,7 +311,7 @@ export default function CasesPage() {
               <div className="flex items-center justify-between pb-3 border-b border-gray-100 mb-4">
                 <div>
                   <h3 className="font-display text-base font-bold text-navy-950">
-                    {isPanaceaStaff ? '🏛️ Directorate Mandate Intake Registration' : 'New Docket Intake'}
+                    {isPanaceaStaff ? 'Directorate Mandate Intake Registration' : 'New Docket Intake'}
                   </h3>
                   <p className="text-[11px] text-gray-500 mt-0.5">
                     Register a new secured creditor enforcement file under SARFAESI Act, 2002.
@@ -318,18 +320,21 @@ export default function CasesPage() {
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="text-gray-400 hover:text-gray-600 font-bold"
+                  className="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100 transition-colors"
+                  aria-label="Close modal"
                 >
-                  ✕
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
               </div>
 
               <form onSubmit={handleCreateCase} className="space-y-4">
-                {/* Empanelled Bank Picker (Only for Panacea Staff & Directors) */}
+                {/* Empanelled Institution Picker (Only for Panacea Staff & Directors) */}
                 {isPanaceaStaff && (
                   <div>
                     <label className="block text-xs font-semibold text-navy-900 mb-1">
-                      Empanelled Secured Creditor Bank *
+                      Empanelled Secured Creditor Institution *
                     </label>
                     <select
                       value={selectedOrgId}

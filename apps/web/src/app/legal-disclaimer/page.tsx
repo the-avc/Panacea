@@ -39,8 +39,8 @@ export default function LegalDisclaimerPage() {
             All actions executed under the SARFAESI Act, 2002—including the drafting and issuance of
             notices under Section 13(2), filing of petitions under Section 14, and physical possession
             takeovers—are carried out strictly as authorized agents and support service providers to
-            the Authorised Officers of the client banks and financial institutions in compliance with
-            applicable law.
+            the Authorised Officers of client banks, NBFCs, ARCs, and institutional creditors in
+            compliance with applicable law.
           </p>
         </div>
 

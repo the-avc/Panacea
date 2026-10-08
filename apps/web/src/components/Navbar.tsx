@@ -23,19 +23,14 @@ export const Navbar: React.FC = () => {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-navy-100/80 bg-white/95 backdrop-blur-md">
       <div className="mx-auto flex h-20 w-full max-w-[1800px] items-center justify-between px-4 sm:px-6 lg:px-6 xl:px-8 2xl:px-14">
-        {/* Brand Logo - anchored left with guaranteed separation */}
-        <Link href="/" className="flex items-center gap-3 group shrink-0 mr-3 xl:mr-6 2xl:mr-10">
-          <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-navy-950 text-gold-400 font-display text-xl font-bold border border-gold-500/30 shadow-sm group-hover:bg-navy-900 transition-colors">
-            P
-          </div>
-          <div>
-            <span className="block font-display text-lg font-bold tracking-tight text-navy-950 leading-tight">
-              PANACEA
-            </span>
-            <span className="block text-[10px] font-semibold tracking-widest text-burgundy-700 uppercase">
-              Consultancy Pvt Ltd
-            </span>
-          </div>
+        {/* Brand Wordmark - authentic corporate identity without faux logo box */}
+        <Link href="/" className="flex flex-col shrink-0 mr-3 xl:mr-6 2xl:mr-10 group">
+          <span className="font-display text-xl sm:text-2xl font-bold tracking-[0.08em] text-navy-950 leading-none group-hover:text-burgundy-900 transition-colors">
+            PANACEA
+          </span>
+          <span className="text-[9px] sm:text-[10px] font-semibold tracking-[0.22em] text-burgundy-800 uppercase mt-1">
+            Consultancy Private Limited
+          </span>
         </Link>
 
         {/* Desktop Nav - centered with ample breathing room */}
@@ -65,11 +60,23 @@ export const Navbar: React.FC = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center rounded-md bg-navy-950 px-2.5 xl:px-3 2xl:px-4 py-2 text-[11px] xl:text-xs font-semibold text-white shadow-sm hover:bg-navy-900 active:bg-navy-950 border border-navy-700 transition-colors gap-1.5 whitespace-nowrap"
-            title="Secured Creditor Bank Officer Portal"
+            title="Institutional Client Portal (Banks, NBFCs, ARCs, Housing Finance Companies)"
           >
-            <span className="text-sm">🏦</span>
+            <svg
+              className="h-3.5 w-3.5 text-gold-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+              />
+            </svg>
             <span>
-              <span className="hidden 2xl:inline">Bank </span>Client Portal
+              <span className="hidden 2xl:inline">Institutional </span>Client Portal
             </span>
           </a>
 
@@ -80,7 +87,19 @@ export const Navbar: React.FC = () => {
             className="inline-flex items-center justify-center rounded-md bg-burgundy-900 px-2.5 xl:px-3 2xl:px-4 py-2 text-[11px] xl:text-xs font-semibold text-gold-300 shadow-sm hover:bg-burgundy-800 active:bg-burgundy-950 border border-gold-500/40 transition-colors gap-1.5 whitespace-nowrap"
             title="Panacea Managing Directors & Platform Administrators"
           >
-            <span className="text-sm">🏛️</span>
+            <svg
+              className="h-3.5 w-3.5 text-gold-300"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
+              />
+            </svg>
             <span>
               <span className="hidden 2xl:inline">Directorate & </span>Admin Login
             </span>
@@ -137,14 +156,38 @@ export const Navbar: React.FC = () => {
                 href={`${portalBase}/login?portal=client`}
                 className="flex items-center justify-center gap-2 rounded-md bg-navy-950 py-2.5 px-4 text-xs font-semibold text-white border border-navy-700"
               >
-                <span>🏦</span>
-                <span>Bank Client Portal</span>
+                <svg
+                  className="h-4 w-4 text-gold-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+                <span>Institutional Client Portal</span>
               </a>
               <a
                 href={`${portalBase}/admin/login`}
                 className="flex items-center justify-center gap-2 rounded-md bg-burgundy-900 py-2.5 px-4 text-xs font-semibold text-gold-300 border border-gold-500/40"
               >
-                <span>🏛️</span>
+                <svg
+                  className="h-4 w-4 text-gold-300"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
+                  />
+                </svg>
                 <span>Directorate & Admin Login</span>
               </a>
             </div>
@@ -154,4 +197,3 @@ export const Navbar: React.FC = () => {
     </header>
   );
 };
-

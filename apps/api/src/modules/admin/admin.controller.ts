@@ -15,7 +15,7 @@ const router = Router();
 router.get(
   '/audit-logs',
   requireAuth,
-  requireRoles(['platform_super_admin', 'security_compliance_admin']),
+  requireRoles(['platform_super_admin', 'operations_admin', 'security_compliance_admin']),
   async (req: AppRequest, res: Response, next) => {
     try {
       const { eventType, actorId, orgId, page = '1', pageSize = '50' } = req.query;
@@ -56,7 +56,7 @@ router.get(
 router.get(
   '/security-events',
   requireAuth,
-  requireRoles(['platform_super_admin', 'security_compliance_admin']),
+  requireRoles(['platform_super_admin', 'operations_admin', 'security_compliance_admin']),
   async (req: AppRequest, res: Response, next) => {
     try {
       const { severity } = req.query;
@@ -78,7 +78,7 @@ router.get(
 router.get(
   '/security-events/:id',
   requireAuth,
-  requireRoles(['platform_super_admin', 'security_compliance_admin']),
+  requireRoles(['platform_super_admin', 'operations_admin', 'security_compliance_admin']),
   async (req: AppRequest, res: Response, next) => {
     try {
       const id = req.params.id as string;
@@ -104,7 +104,7 @@ router.get(
 router.post(
   '/security-events/:id/resolve',
   requireAuth,
-  requireRoles(['platform_super_admin', 'security_compliance_admin']),
+  requireRoles(['platform_super_admin', 'operations_admin', 'security_compliance_admin']),
   async (req: AppRequest, res: Response, next) => {
     try {
       const id = req.params.id as string;

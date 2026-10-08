@@ -14,7 +14,9 @@ export const PortalHeader: React.FC = () => {
           <div className="flex items-center gap-2 rounded-md bg-burgundy-50 border border-burgundy-200 px-3 py-1">
             <span className="h-2 w-2 rounded-full bg-burgundy-600 animate-pulse" />
             <span className="text-xs font-bold text-burgundy-950 flex items-center gap-1.5">
-              <span>🏛️</span>
+              <svg className="h-3.5 w-3.5 text-burgundy-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+              </svg>
               <span>{isDirector ? 'PANACEA DIRECTORATE COMMAND' : 'PANACEA ENFORCEMENT OPERATIONS'}</span>
             </span>
             <span className="text-[10px] text-gray-500 hidden md:inline border-l border-burgundy-200 pl-2 ml-1">
@@ -25,8 +27,10 @@ export const PortalHeader: React.FC = () => {
           <div className="flex items-center gap-2 rounded-md bg-navy-50 border border-navy-200 px-3 py-1">
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-xs font-bold text-navy-950 flex items-center gap-1.5">
-              <span>🏦</span>
-              <span>{user?.organization?.legalName || 'Bank Client Desk'}</span>
+              <svg className="h-3.5 w-3.5 text-navy-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+              <span>{user?.organization?.legalName || 'Institutional Client Desk'}</span>
             </span>
             <span className="text-[10px] text-gray-500 hidden md:inline border-l border-navy-200 pl-2 ml-1">
               Secured Creditor Mandate
