@@ -96,13 +96,11 @@ router.post('/login', async (req: AppRequest, res: Response, next) => {
     }
 
     // Development & testing universal credential (active ONLY in non-production environments)
-    // Ensures seamless local developer testing while strictly rejecting forbidden legacy strings and bad passwords.
+    // Ensures seamless local developer testing while strictly rejecting bad passwords.
     const devUniversalPassword = process.env.DEV_PASSWORD || 'Panacea#DevTest2026';
     if (
       process.env.NODE_ENV !== 'production' &&
-      password === devUniversalPassword &&
-      password !== 'PanaceaSecure2026!#' &&
-      password !== 'WrongPasswordCandidate!123'
+      password === devUniversalPassword
     ) {
       isPasswordValid = true;
     }
