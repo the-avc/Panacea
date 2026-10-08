@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { PortalLayout } from '../../../components/PortalLayout';
 import { useAuth } from '../../../context/AuthContext';
-import { apiFetch } from '../../../lib/api';
+import { apiFetch, API_ORIGIN } from '../../../lib/api';
 
 export default function CaseDetailPage() {
   const { isPanaceaStaff, isDirector } = useAuth();
@@ -25,12 +25,17 @@ export default function CaseDetailPage() {
   const [transitioning, setTransitioning] = useState(false);
   const [statusError, setStatusError] = useState('');
 
-  // Upload modal
+  // Upload modal state
   const [showUploadModal, setShowUploadModal] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadFilename, setUploadFilename] = useState('');
-  const [uploadMime, setUploadMime] = useState('application/pdf');
   const [uploadClassification, setUploadClassification] = useState('confidential');
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
+  const [uploadSuccessToast, setUploadSuccessToast] = useState('');
+  const [downloadingDocId, setDownloadingDocId] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Officer Assignment modal
   const [showAssignModal, setShowAssignModal] = useState(false);
@@ -86,24 +91,66 @@ export default function CaseDetailPage() {
     loadCaseDetails();
   };
 
+  const handleFilePicked = (file: File) => {
+    if (file.size > 50 * 1024 * 1024) {
+      setUploadError('File exceeds maximum limit of 50MB.');
+      return;
+    }
+    setSelectedFile(file);
+    setUploadError('');
+    if (!uploadFilename.trim()) {
+      setUploadFilename(file.name);
+    }
+  };
+
+  const handleAttachSamplePdf = () => {
+    // Generate valid statutory PDF with standard magic bytes (%PDF-1.4)
+    const samplePdfContent =
+      '%PDF-1.4\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n3 0 obj\n<< /Type /Page /Parent 2 0 R /Resources <<>> /MediaBox [0 0 612 792] >>\nendobj\nxref\n0 4\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \ntrailer\n<< /Size 4 /Root 1 0 R >>\nstartxref\n190\n%%EOF';
+    const blob = new Blob([samplePdfContent], { type: 'application/pdf' });
+    const testFile = new File(
+      [blob],
+      `Statutory_Demand_Notice_13_2_${Date.now().toString().slice(-4)}.pdf`,
+      { type: 'application/pdf' },
+    );
+    setSelectedFile(testFile);
+    setUploadFilename(testFile.name);
+    setUploadError('');
+  };
+
   const handleUploadDocument = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedFile) {
+      setUploadError('Please select a file to upload or click "Attach Sample PDF".');
+      return;
+    }
+
     setUploading(true);
+    setUploadError('');
+
+    const formData = new FormData();
+    formData.append('file', selectedFile, uploadFilename.trim() || selectedFile.name);
+    formData.append('classification', uploadClassification);
 
     const res = await apiFetch<any>(`/cases/${caseId}/documents/upload`, {
       method: 'POST',
-      body: JSON.stringify({
-        filename: uploadFilename,
-        mimeType: uploadMime,
-        sizeBytes: 1540200, // mock 1.5MB
-        classification: uploadClassification,
-      }),
+      body: formData,
     });
 
     setUploading(false);
+    if (res.error) {
+      setUploadError(res.error.message || 'Upload failed. Disallowed type or corrupted bytes.');
+      return;
+    }
+
     if (res.data?.id) {
       setShowUploadModal(false);
+      setSelectedFile(null);
       setUploadFilename('');
+      setUploadSuccessToast(
+        `Document "${res.data.originalFilename || uploadFilename}" uploaded & registered in vault!`,
+      );
+      setTimeout(() => setUploadSuccessToast(''), 4500);
       loadCaseDetails();
     }
   };
@@ -124,12 +171,35 @@ export default function CaseDetailPage() {
   };
 
   const handleDownload = async (docId: string, filename: string) => {
-    const res = await apiFetch<any>(`/documents/${docId}/download`, {
-      method: 'POST',
-    });
+    setDownloadingDocId(docId);
+    try {
+      const res = await apiFetch<any>(`/documents/${docId}/download`, {
+        method: 'POST',
+      });
 
-    if (res.data?.downloadUrl) {
-      alert(`Secure download authorized. Ephemeral signed link issued for "${filename}" (5-minute TTL).`);
+      if (res.error) {
+        alert(`Download error: ${res.error.message}`);
+        return;
+      }
+
+      if (res.data?.downloadUrl) {
+        const fullUrl = `${API_ORIGIN}${res.data.downloadUrl}`;
+        const anchor = document.createElement('a');
+        anchor.href = fullUrl;
+        anchor.download = filename || res.data.filename || 'case-document.pdf';
+        anchor.target = '_blank';
+        anchor.rel = 'noopener noreferrer';
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
+
+        setUploadSuccessToast(`Secure signed download started for "${filename}"`);
+        setTimeout(() => setUploadSuccessToast(''), 4000);
+      }
+    } catch {
+      alert('Failed to initiate secure document download.');
+    } finally {
+      setDownloadingDocId(null);
     }
   };
 
@@ -214,42 +284,80 @@ export default function CaseDetailPage() {
               </h2>
               <button
                 type="button"
-                onClick={() => setShowUploadModal(true)}
-                className="rounded-md border border-gray-200 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 text-xs font-semibold text-navy-900 transition-colors"
+                onClick={() => {
+                  setUploadError('');
+                  setShowUploadModal(true);
+                }}
+                className="rounded-md bg-navy-950 hover:bg-navy-900 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors flex items-center gap-1.5"
               >
-                + Upload Document
+                <span>+</span>
+                <span>Upload Document</span>
               </button>
             </div>
 
+            {uploadSuccessToast && (
+              <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-semibold flex items-center justify-between">
+                <span className="flex items-center gap-1.5">
+                  <svg className="h-4 w-4 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>{uploadSuccessToast}</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setUploadSuccessToast('')}
+                  className="text-emerald-700 hover:text-emerald-900 p-1"
+                  aria-label="Dismiss toast"
+                >
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            )}
+
             {documents.length === 0 ? (
               <div className="p-8 text-center text-xs text-gray-400 italic">
-                No statutory documents uploaded for this docket yet.
+                No statutory documents uploaded for this docket yet. Click "+ Upload Document" above to upload or attach statutory notices.
               </div>
             ) : (
               <div className="divide-y divide-gray-100">
                 {documents.map((doc) => (
                   <div key={doc.id} className="py-3 flex items-center justify-between gap-4 text-xs">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="h-8 w-8 rounded bg-navy-50 text-navy-900 flex items-center justify-center font-bold text-xs shrink-0">
-                        PDF
+                      <div className="h-9 w-9 rounded-lg bg-navy-50 text-navy-900 border border-navy-100 flex items-center justify-center font-bold text-xs shrink-0">
+                        {doc.mimeType?.includes('pdf')
+                          ? 'PDF'
+                          : doc.mimeType?.includes('image')
+                          ? 'IMG'
+                          : 'DOC'}
                       </div>
                       <div className="truncate">
                         <div className="font-semibold text-navy-950 truncate">
                           {doc.originalFilename}
                         </div>
-                        <div className="text-[11px] text-gray-500">
-                          {Math.round(doc.sizeBytes / 1024)} KB · Uploaded on{' '}
-                          {new Date(doc.createdAt).toLocaleDateString()}
+                        <div className="text-[11px] text-gray-500 flex items-center gap-2 mt-0.5">
+                          <span>{Math.round(doc.sizeBytes / 1024)} KB</span>
+                          <span>·</span>
+                          <span className="uppercase text-[10px] font-mono px-1.5 py-0.2 rounded bg-gray-100 text-gray-700">
+                            {doc.classification}
+                          </span>
+                          <span>·</span>
+                          <span>Uploaded {new Date(doc.createdAt).toLocaleDateString()}</span>
                         </div>
                       </div>
                     </div>
 
                     <button
                       type="button"
+                      disabled={downloadingDocId === doc.id}
                       onClick={() => handleDownload(doc.id, doc.originalFilename)}
-                      className="shrink-0 rounded bg-navy-50 hover:bg-navy-100 text-navy-900 font-semibold px-3 py-1.5 text-xs transition-colors"
+                      className="shrink-0 rounded-md bg-navy-50 hover:bg-navy-100 text-navy-900 font-semibold px-3 py-1.5 text-xs transition-colors flex items-center gap-1.5 disabled:opacity-50"
                     >
-                      Download Signed URL
+                      <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                      </svg>
+                      <span>{downloadingDocId === doc.id ? 'Streaming...' : 'Download File'}</span>
                     </button>
                   </div>
                 ))}
@@ -406,15 +514,143 @@ export default function CaseDetailPage() {
         {/* Upload Document Modal */}
         {showUploadModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-950/60 backdrop-blur-sm">
-            <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-gray-200">
-              <h3 className="font-display text-lg font-bold text-navy-950 mb-3">
-                Upload Case Docket Document
-              </h3>
+            <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl border border-gray-200">
+              <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+                <div>
+                  <h3 className="font-display text-lg font-bold text-navy-950">
+                    Upload Case Docket Document
+                  </h3>
+                  <p className="text-[11px] text-gray-500">
+                    Encrypted vault storage · Multi-tenant isolated · SHA-256 verified
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowUploadModal(false);
+                    setSelectedFile(null);
+                    setUploadError('');
+                  }}
+                  className="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100 transition-colors"
+                  aria-label="Close upload modal"
+                >
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
 
-              <form onSubmit={handleUploadDocument} className="space-y-4">
+              {uploadError && (
+                <div
+                  role="alert"
+                  className="mt-4 p-3 rounded-md bg-burgundy-50 border border-burgundy-200 text-xs font-semibold text-burgundy-800 flex items-center gap-2"
+                >
+                  <svg className="h-4 w-4 text-burgundy-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <span>{uploadError}</span>
+                </div>
+              )}
+
+              <form onSubmit={handleUploadDocument} className="mt-4 space-y-4">
+                {/* File Dropzone */}
+                <div>
+                  <label className="block text-xs font-semibold text-navy-900 mb-1.5">
+                    Select File (PDF, JPEG, PNG, DOCX, XLSX — Max 50MB) *
+                  </label>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf,.png,.jpg,.jpeg,.docx,.xlsx"
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        handleFilePicked(e.target.files[0]);
+                      }
+                    }}
+                  />
+
+                  {selectedFile ? (
+                    <div className="p-4 rounded-xl border-2 border-emerald-500/40 bg-emerald-50/40 flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="h-10 w-10 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0">
+                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-xs font-bold text-navy-950 truncate">
+                            {selectedFile.name}
+                          </p>
+                          <p className="text-[10px] text-gray-500">
+                            {(selectedFile.size / 1024).toFixed(1)} KB · {selectedFile.type || 'Document'}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedFile(null);
+                          if (fileInputRef.current) fileInputRef.current.value = '';
+                        }}
+                        className="text-xs text-burgundy-700 hover:text-burgundy-900 font-semibold px-2 py-1 rounded hover:bg-burgundy-50"
+                      >
+                        Change
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        setIsDragging(true);
+                      }}
+                      onDragLeave={() => setIsDragging(false)}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        setIsDragging(false);
+                        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                          handleFilePicked(e.dataTransfer.files[0]);
+                        }
+                      }}
+                      onClick={() => fileInputRef.current?.click()}
+                      className={`p-6 rounded-xl border-2 border-dashed text-center cursor-pointer transition-all ${
+                        isDragging
+                          ? 'border-navy-900 bg-navy-50'
+                          : 'border-gray-300 hover:border-navy-500 hover:bg-gray-50/60'
+                      }`}
+                    >
+                      <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 text-navy-800 mb-2">
+                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                      </div>
+                      <p className="text-xs font-semibold text-navy-950">
+                        Drag & drop statutory document here, or{' '}
+                        <span className="text-burgundy-800 underline">browse files</span>
+                      </p>
+                      <p className="text-[10px] text-gray-400 mt-1">
+                        Supported: Statutory 13(2) Notices, Section 14 Petitions, Certified DM Orders, Panchnamas
+                      </p>
+                    </div>
+                  )}
+
+                  {/* 1-Click Test Attachment Helper */}
+                  <div className="mt-2.5 flex items-center justify-between text-[11px]">
+                    <span className="text-gray-400">Quick Testing:</span>
+                    <button
+                      type="button"
+                      onClick={handleAttachSamplePdf}
+                      className="text-xs font-semibold text-navy-800 hover:text-navy-950 bg-navy-50 hover:bg-navy-100 px-2.5 py-1 rounded transition-colors flex items-center gap-1 border border-navy-200"
+                    >
+                      <span>Attach Sample Statutory Notice PDF</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Custom Display Title */}
                 <div>
                   <label className="block text-xs font-semibold text-navy-900 mb-1">
-                    Document Title / File Name *
+                    Document Display Name / Docket Filing Title
                   </label>
                   <input
                     type="text"
@@ -422,38 +658,45 @@ export default function CaseDetailPage() {
                     value={uploadFilename}
                     onChange={(e) => setUploadFilename(e.target.value)}
                     placeholder="e.g. Certified_Section14_Order_Patna_DM.pdf"
-                    className="w-full rounded-md border border-gray-300 p-2 text-xs text-navy-950 focus:border-navy-600 focus:outline-none"
+                    className="w-full rounded-md border border-gray-300 p-2.5 text-xs text-navy-950 focus:border-navy-600 focus:outline-none"
                   />
                 </div>
 
+                {/* Classification */}
                 <div>
                   <label className="block text-xs font-semibold text-navy-900 mb-1">
-                    Classification *
+                    Security Classification *
                   </label>
                   <select
                     value={uploadClassification}
                     onChange={(e) => setUploadClassification(e.target.value)}
-                    className="w-full rounded-md border border-gray-300 p-2 text-xs text-navy-950 focus:border-navy-600 focus:outline-none"
+                    className="w-full rounded-md border border-gray-300 p-2.5 text-xs text-navy-950 focus:border-navy-600 focus:outline-none"
                   >
-                    <option value="confidential">CONFIDENTIAL</option>
-                    <option value="restricted">RESTRICTED</option>
+                    <option value="confidential">CONFIDENTIAL (Standard Creditor / Nodal Officer Access)</option>
+                    <option value="restricted">RESTRICTED (Directorate & Administrative Roles Only)</option>
                   </select>
                 </div>
 
+                {/* Actions */}
                 <div className="flex items-center justify-end gap-3 pt-3 border-t border-gray-100">
                   <button
                     type="button"
-                    onClick={() => setShowUploadModal(false)}
-                    className="rounded border border-gray-200 px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50"
+                    onClick={() => {
+                      setShowUploadModal(false);
+                      setSelectedFile(null);
+                      setUploadError('');
+                    }}
+                    className="rounded border border-gray-200 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    disabled={uploading}
-                    className="rounded bg-navy-950 hover:bg-navy-900 px-4 py-1.5 text-xs font-semibold text-white disabled:opacity-50"
+                    disabled={uploading || !selectedFile}
+                    className="rounded-md bg-navy-950 hover:bg-navy-900 px-5 py-2 text-xs font-semibold text-white shadow-sm transition-colors disabled:opacity-50 flex items-center gap-2"
                   >
-                    {uploading ? 'Validating & Uploading...' : 'Upload Document'}
+                    {uploading && <span className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />}
+                    <span>{uploading ? 'Validating Magic Bytes & Uploading...' : 'Upload & Secure in Vault'}</span>
                   </button>
                 </div>
               </form>

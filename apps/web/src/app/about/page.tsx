@@ -102,6 +102,83 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Official Mission & Objectives (Directly from Corporate Profile) */}
+      <section className="py-16 bg-navy-50/50 border-t border-gray-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            <div className="lg:col-span-6">
+              <span className="text-xs font-bold uppercase tracking-widest text-burgundy-700">
+                Strategic Orientation
+              </span>
+              <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-navy-950">
+                Our Mission
+              </h2>
+              <div className="mt-4 rounded-xl border border-gray-200 bg-white p-6 shadow-sm space-y-3 text-xs sm:text-sm text-gray-700 leading-relaxed">
+                <p>
+                  Requirements for satisfying consumer needs, burdens of overdue debt, and the need for effective customer retention etc., throw up never-ending challenges for any business.
+                </p>
+                <p>
+                  We believe in building long-lasting strategic relationship. We have sufficient experience and expertise needed establish a mutually beneficial relationship between clients and their debtors whereby we assist our clients in recovering outstanding amounts owing by implementing the most efficient means possible and take away your anxiety off issues regarding debt recovery and allow clients to focus on the core business processes and help them in transforming their business.
+                </p>
+              </div>
+
+              <div className="mt-6 p-4 rounded-xl border border-gold-400/40 bg-gold-50/60 text-xs text-navy-950">
+                <span className="font-bold text-burgundy-900 block mb-1 uppercase tracking-wider">
+                  Momentum & Partnership
+                </span>
+                <p className="italic">
+                  “Momentum Movement Forward motion. It is what we have been doing since we started out, and it has been growing. Our client’s momentum feeds ours and we sustain theirs. It’s a partnership.”
+                </p>
+              </div>
+            </div>
+
+            <div className="lg:col-span-6">
+              <span className="text-xs font-bold uppercase tracking-widest text-burgundy-700">
+                Operational Benchmarks
+              </span>
+              <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-navy-950">
+                Our Objectives
+              </h2>
+              <p className="mt-2 text-xs text-gray-500">
+                The 5 core operational benchmarks governing all enforcement assignments (verbatim from profile):
+              </p>
+              <div className="mt-4 space-y-3 text-xs sm:text-sm text-gray-700">
+                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200 shadow-sm">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-navy-900 text-gold-400 text-xs font-bold">1</span>
+                  <span>
+                    To complete the process under SARFAESI Act in mortgage properties. (Sending 13(2) notice to Auction of properties.)
+                  </span>
+                </div>
+                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200 shadow-sm">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-navy-900 text-gold-400 text-xs font-bold">2</span>
+                  <span>
+                    To arrange the Sec 14 order within the shortest period of time.
+                  </span>
+                </div>
+                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200 shadow-sm">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-navy-900 text-gold-400 text-xs font-bold">3</span>
+                  <span>
+                    To be proven by our clients as the agency of choice in terms of performance and results.
+                  </span>
+                </div>
+                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200 shadow-sm">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-navy-900 text-gold-400 text-xs font-bold">4</span>
+                  <span>
+                    To have strong relationships with key Organizations in selected market Segments.
+                  </span>
+                </div>
+                <div className="flex items-start gap-3 p-3.5 rounded-lg bg-white border border-gray-200 shadow-sm">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-navy-900 text-gold-400 text-xs font-bold">5</span>
+                  <span>
+                    To be an extension of overall our clients business approach and an exclusive Debt Solutions partner.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Regional Operational Boundaries */}
       <section className="py-16 bg-[#fbfcfd] border-t border-gray-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -126,7 +203,7 @@ export default function AboutPage() {
                 districts. Enforcement, third-party investigations, asset verification, and recovery support.
               </p>
               <span className="inline-block px-2.5 py-1 bg-navy-50 text-navy-800 text-[11px] font-semibold rounded">
-                Active Banking Vertical
+                Active Institutional Mandates (Banking, NBFC, ARC & Insurance)
               </span>
             </div>
 
@@ -137,7 +214,7 @@ export default function AboutPage() {
                 Jamshedpur, Dhanbad, Bokaro, and all adjoining commissionerates.
               </p>
               <span className="inline-block px-2.5 py-1 bg-navy-50 text-navy-800 text-[11px] font-semibold rounded">
-                Active Banking Vertical
+                Active Institutional Mandates (Banking, NBFC, ARC & Insurance)
               </span>
             </div>
 
@@ -148,7 +225,7 @@ export default function AboutPage() {
                 covering Raipur, Bilaspur, Durg, Bhilai, and regional districts.
               </p>
               <span className="inline-block px-2.5 py-1 bg-navy-50 text-navy-800 text-[11px] font-semibold rounded">
-                Active Banking Vertical
+                Active Institutional Mandates (Banking, NBFC, ARC & Insurance)
               </span>
             </div>
           </div>

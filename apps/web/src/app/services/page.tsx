@@ -150,6 +150,15 @@ export default function ServicesPage() {
                 Assistance with the disposition of repossessed assets to maximize statutory recovery
                 yields while complying with SARFAESI Security Interest (Enforcement) Rules.
               </p>
+              <div className="mt-6">
+                <Link
+                  href="/services/auction-assistance"
+                  className="inline-flex items-center gap-1.5 rounded-md bg-navy-950 px-4 py-2 text-xs font-semibold text-white hover:bg-navy-900 transition-colors"
+                >
+                  <span>Auction Support Procedures</span>
+                  <span>→</span>
+                </Link>
+              </div>
             </div>
 
             <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">

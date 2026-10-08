@@ -49,7 +49,7 @@ export default function InvestigationPage() {
                 staged losses, and assessment of factual bona fides. Handled with sensitivity and
                 strict non-disclosure to protect institutional brand integrity.
               </p>
-              <ul className="space-y-2 text-xs text-gray-700">
+              <ul className="space-y-2 text-xs text-gray-700 mb-6">
                 <li className="flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-burgundy-700" />
                   <span>Accident scene verification & witness fact-checking</span>
@@ -63,31 +63,45 @@ export default function InvestigationPage() {
                   <span>Document genuineness and local authority cross-verification</span>
                 </li>
               </ul>
+              <Link
+                href="/services/investigation/third-party"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-burgundy-700 hover:text-burgundy-900"
+              >
+                <span>Third-Party Protocol Details →</span>
+              </Link>
             </div>
 
             {/* Card 2 */}
-            <div className="rounded-xl border border-gray-200 bg-[#fbfcfd] p-8">
-              <h3 className="font-display text-xl font-bold text-navy-950 mb-3">
-                Asset Tracing & Physical Inspection
-              </h3>
-              <p className="text-xs text-gray-600 leading-relaxed mb-4">
-                Thorough physical verification of secured real estate and movable assets prior to
-                statutory enforcement, DRT attachment, or auction scheduling.
-              </p>
-              <ul className="space-y-2 text-xs text-gray-700">
-                <li className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-burgundy-700" />
-                  <span>GPS geocoding and photographic boundary demarcations</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-burgundy-700" />
-                  <span>Occupancy checks (tenant agreements vs third-party squatters)</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-burgundy-700" />
-                  <span>Structural integrity and encroachment assessments</span>
-                </li>
-              </ul>
+            <div className="rounded-xl border border-gray-200 bg-[#fbfcfd] p-8 flex flex-col justify-between">
+              <div>
+                <h3 className="font-display text-xl font-bold text-navy-950 mb-3">
+                  Asset Tracing & Physical Inspection
+                </h3>
+                <p className="text-xs text-gray-600 leading-relaxed mb-4">
+                  Thorough physical verification of secured real estate and movable assets prior to
+                  statutory enforcement, DRT attachment, or auction scheduling.
+                </p>
+                <ul className="space-y-2 text-xs text-gray-700 mb-6">
+                  <li className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-burgundy-700" />
+                    <span>GPS geocoding and photographic boundary demarcations</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-burgundy-700" />
+                    <span>Occupancy checks (tenant agreements vs third-party squatters)</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-burgundy-700" />
+                    <span>Structural integrity and encroachment assessments</span>
+                  </li>
+                </ul>
+              </div>
+              <Link
+                href="/services/investigation/asset-verification"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-burgundy-700 hover:text-burgundy-900"
+              >
+                <span>Asset Verification Protocol →</span>
+              </Link>
             </div>
 
             {/* Card 3 */}
@@ -141,6 +155,26 @@ export default function InvestigationPage() {
               </ul>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Client Portal Callout */}
+      <section className="py-12 bg-navy-950 text-white border-t border-navy-900">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div>
+            <h4 className="font-display text-xl font-bold text-white">
+              Commission an Investigation or Collateral Audit
+            </h4>
+            <p className="mt-1 text-xs text-gray-300">
+              Institutional claim managers and bank officers can commission discrete assignments with verified confidentiality.
+            </p>
+          </div>
+          <Link
+            href="/contact"
+            className="rounded-md bg-gold-500 hover:bg-gold-600 px-5 py-2.5 text-xs font-semibold text-navy-950 shrink-0"
+          >
+            Instruct Panacea Team →
+          </Link>
         </div>
       </section>
     </div>

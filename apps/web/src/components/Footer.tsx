@@ -26,18 +26,13 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           {/* Column 1: Company Profile */}
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-navy-900 text-gold-400 font-display text-lg font-bold border border-gold-500/30">
-                P
-              </div>
-              <div>
-                <span className="block font-display text-base font-bold text-white tracking-tight">
-                  PANACEA
-                </span>
-                <span className="block text-[9px] font-semibold tracking-widest text-burgundy-400 uppercase">
-                  Consultancy Pvt Ltd
-                </span>
-              </div>
+            <div className="mb-4">
+              <span className="block font-display text-lg font-bold text-white tracking-[0.08em] leading-tight">
+                PANACEA
+              </span>
+              <span className="block text-[10px] font-semibold tracking-[0.2em] text-gold-400 uppercase mt-1">
+                Consultancy Private Limited
+              </span>
             </div>
             <p className="text-xs text-gray-400 leading-relaxed">
               Institutional enforcement and third-party investigation partner dedicated to banks,
@@ -59,7 +54,7 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5 text-xs text-gray-300">
               <li>
                 <Link
-                  href="/services/sarfaesi"
+                  href="/services/sarfaesi/notice-13-2"
                   className="hover:text-white transition-colors flex items-center gap-1.5"
                 >
                   <span className="text-gold-500">›</span> SARFAESI Notice Drafting (Sec 13.2)
@@ -67,7 +62,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link
-                  href="/services/sarfaesi"
+                  href="/services/sarfaesi/section-14"
                   className="hover:text-white transition-colors flex items-center gap-1.5"
                 >
                   <span className="text-gold-500">›</span> Section 14 Application & Orders
@@ -75,7 +70,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link
-                  href="/services/sarfaesi"
+                  href="/services/sarfaesi/possession-execution"
                   className="hover:text-white transition-colors flex items-center gap-1.5"
                 >
                   <span className="text-gold-500">›</span> Physical Possession Execution
@@ -83,7 +78,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link
-                  href="/services/investigation"
+                  href="/services/investigation/third-party"
                   className="hover:text-white transition-colors flex items-center gap-1.5"
                 >
                   <span className="text-gold-500">›</span> Third-Party Investigation (TP)
@@ -91,7 +86,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link
-                  href="/services/investigation"
+                  href="/services/investigation/asset-verification"
                   className="hover:text-white transition-colors flex items-center gap-1.5"
                 >
                   <span className="text-gold-500">›</span> Asset Tracing & Verification
@@ -99,7 +94,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link
-                  href="/services"
+                  href="/services/auction-assistance"
                   className="hover:text-white transition-colors flex items-center gap-1.5"
                 >
                   <span className="text-gold-500">›</span> Auction & Buyer Coordination
@@ -120,7 +115,10 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/institutional-experience" className="hover:text-white transition-colors">
+                <Link
+                  href="/institutional-experience"
+                  className="hover:text-white transition-colors"
+                >
                   Empaneled Institutions
                 </Link>
               </li>
@@ -130,7 +128,10 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/security-confidentiality" className="hover:text-white transition-colors">
+                <Link
+                  href="/security-confidentiality"
+                  className="hover:text-white transition-colors"
+                >
                   Data Security & Non-Disclosure
                 </Link>
               </li>
@@ -141,7 +142,7 @@ export const Footer: React.FC = () => {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-gold-300 hover:text-gold-200 font-semibold"
                 >
-                  Bank Client Portal ↗
+                  Client Portal ↗
                 </a>
               </li>
               <li>
@@ -167,7 +168,7 @@ export const Footer: React.FC = () => {
                 <span className="block text-[11px] text-gray-400">Institutional Inquiries:</span>
                 <a
                   href="mailto:panaceaconsultancypvtltd@gmail.com"
-                  className="text-white hover:text-gold-300 break-all transition-colors"
+                  className="text-white hover:text-gold-300 break-all transition-colors font-mono"
                 >
                   panaceaconsultancypvtltd@gmail.com
                 </a>
@@ -175,11 +176,22 @@ export const Footer: React.FC = () => {
               <div>
                 <span className="block text-[11px] text-gray-400">Operational Desks:</span>
                 <p className="text-white font-mono">+91-9304897257</p>
+                <p className="text-white font-mono">+91-7870657256</p>
                 <p className="text-white font-mono">+91-9431432983</p>
               </div>
               <div className="pt-2 text-[11px] text-gray-400">
-                <span>Territorial Jurisdiction:</span>
-                <p className="text-gray-300">State of Bihar · State of Jharkhand · State of Chhattisgarh</p>
+                <span className="block font-semibold text-gray-300">Operational Office:</span>
+                <p className="text-gray-300 leading-relaxed">
+                  311-C, 3rd Floor, Ashiana Galaxy, Opp. Hotel Lemon Tree, Exhibition Road, Patna -
+                  800 001
+                </p>
+              </div>
+              <div className="pt-1 text-[11px] text-gray-400">
+                <span className="block font-semibold text-gray-300">Registered Office:</span>
+                <p className="text-gray-300 leading-relaxed">
+                  1 Van Vihar, Gali No.-2, Beside Ramawtar Apartment, Near Paras Nath Garden,
+                  Ashiana Nagar, Patna - 800 025
+                </p>
               </div>
             </div>
           </div>
@@ -192,7 +204,8 @@ export const Footer: React.FC = () => {
               Legal Confidentiality Notice:
             </span>{' '}
             Panacea Consultancy Private Limited provides specialized para-legal and enforcement
-            support strictly in accordance with client bank authorizations under the SARFAESI Act,
+            support strictly in accordance with client institutional authorizations (Banks, NBFCs,
+            ARCs, Housing Finance Companies, and Insurance Providers) under the SARFAESI Act,
             2002. All borrower information, recovery records, and case files are strictly
             confidential and privileged. This website does not solicit legal representation from the
             general public.

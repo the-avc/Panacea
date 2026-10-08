@@ -35,18 +35,16 @@ export default function LeadershipPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Mr. Prashant Kumar */}
             <div className="rounded-2xl border border-gray-200 bg-[#fbfcfd] p-8 lg:p-10 shadow-sm">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="h-16 w-16 rounded-xl bg-navy-950 text-gold-400 flex items-center justify-center font-display text-2xl font-bold border border-gold-500/30">
-                  PK
-                </div>
-                <div>
-                  <h2 className="font-display text-2xl font-bold text-navy-950">
-                    Mr. Prashant Kumar
-                  </h2>
-                  <p className="text-xs font-semibold text-burgundy-700 tracking-wide uppercase">
-                    Managing Director
-                  </p>
-                </div>
+              <div className="border-l-4 border-burgundy-800 pl-4 mb-6">
+                <span className="text-[10px] font-bold text-burgundy-800 tracking-widest uppercase block mb-1">
+                  Executive Directorate
+                </span>
+                <h2 className="font-display text-2xl font-bold text-navy-950">
+                  Mr. Prashant Kumar
+                </h2>
+                <p className="text-xs font-semibold text-gray-500 tracking-wide uppercase mt-0.5">
+                  Managing Director
+                </p>
               </div>
 
               <div className="space-y-4 text-xs text-gray-700 leading-relaxed">
@@ -85,18 +83,16 @@ export default function LeadershipPage() {
 
             {/* Mrs. Anjana Singh */}
             <div className="rounded-2xl border border-gray-200 bg-[#fbfcfd] p-8 lg:p-10 shadow-sm">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="h-16 w-16 rounded-xl bg-navy-900 text-gold-400 flex items-center justify-center font-display text-2xl font-bold border border-gold-500/30">
-                  AS
-                </div>
-                <div>
-                  <h2 className="font-display text-2xl font-bold text-navy-950">
-                    Mrs. Anjana Singh
-                  </h2>
-                  <p className="text-xs font-semibold text-burgundy-700 tracking-wide uppercase">
-                    Director
-                  </p>
-                </div>
+              <div className="border-l-4 border-navy-800 pl-4 mb-6">
+                <span className="text-[10px] font-bold text-navy-800 tracking-widest uppercase block mb-1">
+                  Corporate Governance
+                </span>
+                <h2 className="font-display text-2xl font-bold text-navy-950">
+                  Mrs. Anjana Singh
+                </h2>
+                <p className="text-xs font-semibold text-gray-500 tracking-wide uppercase mt-0.5">
+                  Director
+                </p>
               </div>
 
               <div className="space-y-4 text-xs text-gray-700 leading-relaxed">

@@ -37,13 +37,14 @@ export default function PrivacyPolicyPage() {
             2. Categories of Information Processed
           </h2>
           <p>
-            We process data strictly in accordance with official bank authorizations and statutory
-            mandates under the SARFAESI Act, 2002. Categories include:
+            We process data strictly in accordance with official client authorizations (Banks, NBFCs,
+            ARCs, Housing Finance Companies, and Insurance Providers) and statutory mandates under
+            the SARFAESI Act, 2002. Categories include:
           </p>
           <ul className="mt-2 list-disc list-inside space-y-1 text-gray-600">
             <li>
               <strong>Institutional Officer Data:</strong> Official email addresses, designations,
-              and official contact numbers of bank nodal officers.
+              and official contact numbers of institutional nodal officers.
             </li>
             <li>
               <strong>Statutory Docket Records:</strong> Borrower names, mortgaged asset particulars,

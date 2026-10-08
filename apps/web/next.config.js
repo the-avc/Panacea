@@ -41,6 +41,30 @@ const nextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      {
+        source: '/services/notice-13-2',
+        destination: '/services/sarfaesi/notice-13-2',
+      },
+      {
+        source: '/services/section-14',
+        destination: '/services/sarfaesi/section-14',
+      },
+      {
+        source: '/services/possession-execution',
+        destination: '/services/sarfaesi/possession-execution',
+      },
+      {
+        source: '/services/third-party',
+        destination: '/services/investigation/third-party',
+      },
+      {
+        source: '/services/asset-verification',
+        destination: '/services/investigation/asset-verification',
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
